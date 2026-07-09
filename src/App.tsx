@@ -9,12 +9,12 @@ const ApiKeyModal = ({ onSave }: { onSave: (key: string) => void }) => {
   return (
     <div className="modal-overlay">
       <div className="glass-panel modal-content">
-        <h2 style={{ marginTop: 0 }}>Kết Nối Gemini AI</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>Vui lòng nhập Gemini API Key của bạn để sử dụng tính năng tạo kế hoạch bằng AI. Key được lưu cục bộ trên trình duyệt của bạn.</p>
+        <h2 style={{ marginTop: 0 }}>Kết Nối Groq AI</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>Vui lòng nhập Groq API Key của bạn để sử dụng tính năng tạo kế hoạch bằng AI. Key được lưu cục bộ trên trình duyệt của bạn.</p>
         <input 
           type="password" 
           className="input-field" 
-          placeholder="Nhập API Key (AIzaSy...)" 
+          placeholder="Nhập API Key (gsk_...)" 
           value={key}
           onChange={(e) => setKey(e.target.value)}
           style={{ marginBottom: '1rem' }}
@@ -40,19 +40,19 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedKey = localStorage.getItem('gemini_api_key');
+    const savedKey = localStorage.getItem('groq_api_key');
     if (savedKey) {
       setApiKey(savedKey);
     }
   }, []);
 
   const handleSaveKey = (key: string) => {
-    localStorage.setItem('gemini_api_key', key);
+    localStorage.setItem('groq_api_key', key);
     setApiKey(key);
   };
 
   const handleChangeKey = () => {
-    localStorage.removeItem('gemini_api_key');
+    localStorage.removeItem('groq_api_key');
     setApiKey(null);
   };
 
