@@ -8,8 +8,9 @@ const BASE_PLAN = `
 
 export const generatePlan = async (apiKey: string, newIdeas: string) => {
   if (!apiKey) {
-    throw new Error("Vui lòng nhập API Key của Groq.");
+    throw new Error("Vui lòng nhập API Key.");
   }
+  const key = apiKey.trim();
 
   const prompt = `Bạn là một chuyên gia tư vấn chiến lược kinh doanh F&B. 
 Dưới đây là thông tin cơ bản về dự án quán nước của chúng tôi:
@@ -26,27 +27,61 @@ Sử dụng định dạng Markdown. Bao gồm các phần:
 Lưu ý: Viết thật chuyên nghiệp và thực tế.`;
 
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
+    if (key.startsWith("AIza")) {
+      // Gemini API
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(()=>({}));
+        throw new Error(err.error?.message || "Lỗi API Gemini");
+      }
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error?.message || `Lỗi API Groq: ${response.status}`);
+    } else if (key.startsWith("gsk_")) {
+      // Groq API
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(()=>({}));
+        throw new Error(err.error?.message || "Lỗi API Groq");
+      }
+      const data = await response.json();
+      return data.choices[0].message.content;
+
+    } else if (key.startsWith("sk-")) {
+      // OpenAI API
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(()=>({}));
+        throw new Error(err.error?.message || "Lỗi API OpenAI");
+      }
+      const data = await response.json();
+      return data.choices[0].message.content;
+
+    } else {
+      throw new Error("Mã API Key không hợp lệ. Hệ thống chỉ hỗ trợ Key của Gemini (AIza...), Groq (gsk_...) hoặc OpenAI (sk-...).");
     }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
   } catch (error: any) {
-    console.error("Lỗi khi gọi API Groq:", error);
+    console.error("Lỗi khi gọi API:", error);
     throw new Error(error.message || "Đã xảy ra lỗi khi tạo kế hoạch.");
   }
 };
