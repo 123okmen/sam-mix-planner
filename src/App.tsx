@@ -40,12 +40,20 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setApiKey('AQ.Ab8RN6JRxIv71T_C8ndaJHrYmXxs3Rz3MNiD2kgyGwzvff7luA');
+    const savedKey = localStorage.getItem('gemini_api_key');
+    if (savedKey) {
+      setApiKey(savedKey);
+    }
   }, []);
 
   const handleSaveKey = (key: string) => {
     localStorage.setItem('gemini_api_key', key);
     setApiKey(key);
+  };
+
+  const handleChangeKey = () => {
+    localStorage.removeItem('gemini_api_key');
+    setApiKey(null);
   };
 
   const handleGenerate = async () => {
@@ -67,7 +75,8 @@ function App() {
     <>
       {!apiKey && <ApiKeyModal onSave={handleSaveKey} />}
       
-      <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <header style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
+        <button onClick={handleChangeKey} style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>⚙️ Đổi API Key</button>
         <h1 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#10b981' }}>Sâm Mix Planner</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>Hệ thống AI tổng hợp ý tưởng cổ đông & thiết lập kế hoạch</p>
       </header>
