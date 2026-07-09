@@ -64,6 +64,15 @@ function App() {
     try {
       const newPlan = await generatePlan(apiKey!, idea);
       setPlan(newPlan);
+
+      // Save ideas to Google Sheets (fire and forget)
+      fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ ideas: idea, plan: newPlan })
+      }).catch(err => console.error("Failed to sync with Google Sheets", err));
+
     } catch (err: any) {
       setError(err.message || 'Có lỗi xảy ra');
     } finally {
