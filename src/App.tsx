@@ -40,6 +40,11 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const envKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (envKey) {
+      setApiKey(envKey);
+      return;
+    }
     const savedKey = localStorage.getItem('gemini_api_key');
     if (savedKey) setApiKey(savedKey);
   }, []);
