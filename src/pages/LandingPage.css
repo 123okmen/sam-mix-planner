@@ -46,6 +46,30 @@
     font-weight: 700;
 }
 
+.about-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 40px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    border-left: 5px solid #27ae60;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.about-section h3 {
+    color: #1e7145;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.about-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
 .columns {
     display: flex;
     gap: 40px;
