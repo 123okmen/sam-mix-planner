@@ -86,7 +86,10 @@ export default function PlannerPage() {
       <header style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
         <button onClick={handleChangeKey} style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>⚙️ Đổi API Key</button>
         <h1 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#10b981' }}>Sâm Mix Planner</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>Hệ thống AI tổng hợp ý tưởng cổ đông & thiết lập kế hoạch</p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '1.5rem' }}>Hệ thống AI tổng hợp ý tưởng cổ đông & thiết lập kế hoạch</p>
+        <a href={`${import.meta.env.BASE_URL}Lo_Trinh_Kinh_Doanh.pdf`} download="Lo_Trinh_Kinh_Doanh_V4.pdf" style={{ display: 'inline-block', background: '#d35400', color: 'white', padding: '10px 20px', borderRadius: '8px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+          📄 Tải Xuống Bản Kế Hoạch V4 (PDF)
+        </a>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
