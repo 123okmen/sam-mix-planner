@@ -23,7 +23,7 @@ export default function LandingPage() {
                   </div>
                   
                   <div className="menu-item">
-                      <img className="item-thumb" src="/thumb_sam_1784435219193.png" alt="Sâm Nguyên Bản" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_sam_1784435219193.png`} alt="Sâm Nguyên Bản" />
                       <div className="item-info">
                           <h3 className="item-name">1. Sâm Nguyên Bản</h3>
                           <div className="item-desc">Gốc nước sâm nguyên chất thanh mát.</div>
@@ -32,7 +32,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/thumb_cuc_1784435229714.png" alt="Sâm Bông Cúc" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_cuc_1784435229714.png`} alt="Sâm Bông Cúc" />
                       <div className="item-info">
                           <h3 className="item-name">2. Sâm Bông Cúc</h3>
                           <div className="item-desc">Kết hợp bông cúc khô thơm nhẹ.</div>
@@ -41,7 +41,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/thumb_tao_1784435241702.png" alt="Sâm Táo Đỏ" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_tao_1784435241702.png`} alt="Sâm Táo Đỏ" />
                       <div className="item-info">
                           <h3 className="item-name">3. Sâm Táo Đỏ Long Nhãn</h3>
                           <div className="item-desc">Táo đỏ cắt lát & nhãn nhục lịm.</div>
@@ -50,7 +50,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/thumb_sam_1784435219193.png" alt="Sâm Rong Biển" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_sam_1784435219193.png`} alt="Sâm Rong Biển" />
                       <div className="item-info">
                           <h3 className="item-name">4. Sâm Rong Biển Hạt Chia</h3>
                           <div className="item-desc">Rong biển sợi giòn & hạt chia organic.</div>
@@ -77,7 +77,7 @@ export default function LandingPage() {
                   </div>
                   
                   <div className="menu-item">
-                      <img className="item-thumb" src="/cam.jpg" alt="Cam Sành" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}cam.jpg`} alt="Cam Sành" />
                       <div className="item-info">
                           <h3 className="item-name">1. Cam Sành Miền Tây</h3>
                           <div className="item-desc">Nước ép cam sành tươi mọng.</div>
@@ -86,7 +86,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/carot.jpg" alt="Cà Rốt" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}carot.jpg`} alt="Cà Rốt" />
                       <div className="item-info">
                           <h3 className="item-name">2. Cà Rốt Đà Lạt</h3>
                           <div className="item-desc">Nước ép cà rốt ngọt dịu.</div>
@@ -95,7 +95,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/dua.jpeg" alt="Dứa" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}dua.jpeg`} alt="Dứa" />
                       <div className="item-info">
                           <h3 className="item-name">3. Dứa Mật</h3>
                           <div className="item-desc">Nước ép dứa mật đậm đặc.</div>
@@ -104,7 +104,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/coc.jpeg" alt="Cóc" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}coc.jpeg`} alt="Cóc" />
                       <div className="item-info">
                           <h3 className="item-name">4. Cóc Non</h3>
                           <div className="item-desc">Nước ép cóc non chua thanh.</div>
@@ -113,7 +113,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src="/cantay.JPG" alt="Cần Tây" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}cantay.JPG`} alt="Cần Tây" />
                       <div className="item-info">
                           <h3 className="item-name">5. Cần Tây Mix Táo</h3>
                           <div className="item-desc">Detox cần tây, kale, táo mix.</div>
