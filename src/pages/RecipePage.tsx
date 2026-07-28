@@ -16,7 +16,7 @@ export default function RecipePage() {
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(`Đang xử lý Check-in...`);
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbxR2S8zttuU1avpE1fMhSTQkvMzXhovEd0Gu8BTlJtn8ju1YkiNav39tsa-DUlmPS3Z/exec", {
         method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({ type: 'checkin', name: staffName })
       });
@@ -33,7 +33,7 @@ export default function RecipePage() {
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(`Đang xử lý Check-out...`);
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbxR2S8zttuU1avpE1fMhSTQkvMzXhovEd0Gu8BTlJtn8ju1YkiNav39tsa-DUlmPS3Z/exec", {
         method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({ type: 'checkout', name: staffName })
       });
@@ -59,7 +59,7 @@ export default function RecipePage() {
         note: reportData.ghiChu
       };
       
-      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbxR2S8zttuU1avpE1fMhSTQkvMzXhovEd0Gu8BTlJtn8ju1YkiNav39tsa-DUlmPS3Z/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
