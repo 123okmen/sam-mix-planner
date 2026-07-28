@@ -6,7 +6,7 @@ export default function LandingPage() {
       <div className="menu-board">
           <div className="landing-header">
               <h1>Quán Nước Sâm Mix</h1>
-              <h2>Trạm Sâm Mix Topping Thảo Mộc & Nước Ép Trái Cây Tươi</h2>
+              <h2>Trạm Sâm Mix & Nước Ép Trái Cây Tươi</h2>
           </div>
 
           <div className="about-section">
@@ -19,7 +19,7 @@ export default function LandingPage() {
               {/* Sâm Mix Column */}
               <div className="column">
                   <div className="col-title">
-                      🌿 Sâm Mix & Topping
+                      🌿 Sâm Mix Thảo Mộc
                   </div>
                   
                   <div className="menu-item">
@@ -49,16 +49,6 @@ export default function LandingPage() {
                       <div className="item-price">20K</div>
                   </div>
 
-                  <div className="toppings">
-                      <div className="toppings-title">Danh Sách Topping Thảo Mộc (+5K)</div>
-                      <div className="toppings-list">
-                          <span className="topping-tag">🌿 Rong biển sợi</span>
-                          <span className="topping-tag">🌼 Bông cúc sấy</span>
-                          <span className="topping-tag">🍎 Táo đỏ</span>
-                          <span className="topping-tag">🌰 Nhãn nhục</span>
-                          <span className="topping-tag">⚫ Hạt chia</span>
-                      </div>
-                  </div>
               </div>
 
               {/* Nước Ép Column */}
