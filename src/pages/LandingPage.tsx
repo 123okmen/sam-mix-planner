@@ -104,6 +104,17 @@ export default function LandingPage() {
               </div>
           </div>
 
+          <div className="location-section" style={{ textAlign: 'center', padding: '30px 15px', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '15px', margin: '20px 0' }}>
+              <h3 style={{ marginBottom: '15px', color: '#f1c40f' }}>📍 Bản Đồ & Chỉ Đường</h3>
+              <p style={{ marginBottom: '15px' }}>
+                 <a href="https://www.google.com/maps/place/Conic+Garden+A,+B%C3%ACnh+H%C6%B0ng,+H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@10.7178461,106.63765,17z/data=!4m6!3m5!1s0x31752e0f0b58e75b:0xf97af1f03aa15943!8m2!3d10.7178461!4d106.63765!16s%2Fg%2F12hqyml_q?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style={{ color: '#27ae60', fontWeight: 'bold', textDecoration: 'none', fontSize: '1.1em', display: 'inline-block', padding: '10px 15px', backgroundColor: '#fff', borderRadius: '8px' }}>
+                     🗺️ Xem vị trí: Chung cư Conic Garden A, Bình Hưng, Bình Chánh
+                 </a>
+              </p>
+              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent("https://www.google.com/maps/place/Conic+Garden+A,+B%C3%ACnh+H%C6%B0ng,+H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@10.7178461,106.63765,17z/data=!4m6!3m5!1s0x31752e0f0b58e75b:0xf97af1f03aa15943!8m2!3d10.7178461!4d106.63765!16s%2Fg%2F12hqyml_q?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D")}`} alt="QR Code Google Maps" style={{ marginTop: '10px', borderRadius: '10px', border: '3px solid #fff' }} />
+              <p style={{ fontSize: '0.9em', color: '#bdc3c7', marginTop: '10px' }}>(Quét mã để mở Bản đồ chỉ đường trên điện thoại)</p>
+          </div>
+
           <div className="landing-footer">
               📍 Địa chỉ: Chung cư Conic Garden, Khu dân cư Conic, Bình Chánh &nbsp;|&nbsp; ⏰ Giờ mở cửa: 06:00 - 22:30 &nbsp;|&nbsp; 🍃 Healthy & Fresh
           </div>
