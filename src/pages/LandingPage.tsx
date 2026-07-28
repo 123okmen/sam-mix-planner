@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import './LandingPage.css';
 
 export default function LandingPage() {
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
   return (
     <div className="landing-body">
       <div className="menu-board">
@@ -11,9 +14,20 @@ export default function LandingPage() {
           </div>
 
           <div className="about-section">
-              <h3>🏕️ Câu Chuyện & Giá Trị Cốt Lõi</h3>
-              <p><strong>Ý tưởng hình thành:</strong> Khởi nguồn từ một góc nhỏ bình yên giữa lòng KDC Conic nhộn nhịp, "Sâm Mix Healthy" mang trong mình khao khát tạo ra một trạm dừng chân thư giãn mang phong cách cắm trại (Camping) mộc mạc. Chúng mình muốn mang đến những ly nước thanh mát, giải nhiệt và cực kỳ tốt cho sức khỏe để bạn có thể "sạc" lại năng lượng sau những giờ học tập và làm việc căng thẳng.</p>
-              <p><strong>Giá trị cộng đồng:</strong> Không chỉ dừng lại ở một quán nước, Sâm Mix hướng tới việc xây dựng một phong cách sống Xanh - Sạch - Khoẻ. Quán là nơi gắn kết cư dân, tạo không gian giao lưu an toàn, thân thiện với mức giá vô cùng "sinh viên". Chúng mình cam kết sử dụng 100% nguyên liệu tự nhiên, không hoá chất, vì sức khoẻ của chính bạn và những người thân yêu.</p>
+              <h3 
+                onClick={() => setIsAboutOpen(!isAboutOpen)}
+                style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: 0 }}
+              >
+                <span>🏕️ Câu Chuyện & Giá Trị Cốt Lõi</span>
+                <span>{isAboutOpen ? '▲' : '▼'}</span>
+              </h3>
+              
+              {isAboutOpen && (
+                <div style={{ marginTop: '15px' }}>
+                  <p><strong>Ý tưởng hình thành:</strong> Khởi nguồn từ một góc nhỏ bình yên giữa lòng KDC Conic nhộn nhịp, "Sâm Mix Healthy" mang trong mình khao khát tạo ra một trạm dừng chân thư giãn mang phong cách cắm trại (Camping) mộc mạc.</p>
+                  <p><strong>Giá trị cộng đồng:</strong> Quán là nơi gắn kết cư dân, tạo không gian giao lưu an toàn, thân thiện. Chúng mình cam kết sử dụng 100% nguyên liệu tự nhiên, không hoá chất.</p>
+                </div>
+              )}
           </div>
 
           <div className="columns">
