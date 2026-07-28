@@ -4,9 +4,10 @@ export default function LandingPage() {
   return (
     <div className="landing-body">
       <div className="menu-board">
-          <div className="landing-header">
-              <h1>Quán Nước Sâm Mix</h1>
-              <h2>Trạm Sâm Mix & Nước Ép Trái Cây Tươi</h2>
+          <div className="landing-header" style={{ textAlign: 'center', marginBottom: '25px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Sâm Mix Logo" style={{ width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #f39c12', marginBottom: '15px', boxShadow: '0 6px 12px rgba(0,0,0,0.4)' }} />
+              <h1 style={{ fontSize: '2.8rem', margin: '0 0 10px 0', textTransform: 'uppercase', letterSpacing: '2px', color: '#f1c40f', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>SÂM MIX</h1>
+              <h2 style={{ fontSize: '1.2rem', fontStyle: 'italic', fontWeight: '400', color: '#ecf0f1', margin: '0', letterSpacing: '1px' }}>"Thanh Mát Tự Nhiên, Trọn Vị Bình Yên"</h2>
           </div>
 
           <div className="about-section">
