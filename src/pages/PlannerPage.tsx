@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { generatePlan } from '../lib/gemini';
+import LoginGate from '../components/LoginGate';
 
 const ApiKeyModal = ({ onSave }: { onSave: (key: string) => void }) => {
   const [key, setKey] = useState('');
@@ -80,8 +81,9 @@ export default function PlannerPage() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      {!apiKey && <ApiKeyModal onSave={handleSaveKey} />}
+    <LoginGate expectedPassword="sammixgymer" storageKey="auth_planner" title="Khu Vực Cổ Đông">
+      <div style={{ padding: '2rem' }}>
+        {!apiKey && <ApiKeyModal onSave={handleSaveKey} />}
       
       <header style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
         <button onClick={handleChangeKey} style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>⚙️ Đổi API Key</button>
@@ -134,5 +136,6 @@ export default function PlannerPage() {
         
       </div>
     </div>
+    </LoginGate>
   );
 }

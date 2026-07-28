@@ -23,39 +23,30 @@ export default function LandingPage() {
                   </div>
                   
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_sam_1784435219193.png`} alt="Sâm Nguyên Bản" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam bong cuc nhan luc.jpg`} alt="Sâm Bông Cúc Nhãn Lục" />
                       <div className="item-info">
-                          <h3 className="item-name">1. Sâm Nguyên Bản</h3>
-                          <div className="item-desc">Gốc nước sâm nguyên chất thanh mát.</div>
-                      </div>
-                      <div className="item-price">15K</div>
-                  </div>
-
-                  <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_cuc_1784435229714.png`} alt="Sâm Bông Cúc" />
-                      <div className="item-info">
-                          <h3 className="item-name">2. Sâm Bông Cúc</h3>
-                          <div className="item-desc">Kết hợp bông cúc khô thơm nhẹ.</div>
+                          <h3 className="item-name">1. Sâm Bông Cúc Nhãn Nhục</h3>
+                          <div className="item-desc">Giải nhiệt, an thần, thanh lọc cơ thể.</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_tao_1784435241702.png`} alt="Sâm Táo Đỏ" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam cu nang tao do.jpg`} alt="Sâm Củ Năng Táo Đỏ" />
                       <div className="item-info">
-                          <h3 className="item-name">3. Sâm Táo Đỏ Long Nhãn</h3>
-                          <div className="item-desc">Táo đỏ cắt lát & nhãn nhục lịm.</div>
+                          <h3 className="item-name">2. Sâm Củ Năng Táo Đỏ</h3>
+                          <div className="item-desc">Giòn mát củ năng, thơm ngọt táo đỏ.</div>
                       </div>
-                      <div className="item-price">25K</div>
+                      <div className="item-price">20K</div>
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}thumb_sam_1784435219193.png`} alt="Sâm Rong Biển" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam mia lau.jpg`} alt="Sâm Mía Lau" />
                       <div className="item-info">
-                          <h3 className="item-name">4. Sâm Rong Biển Hạt Chia</h3>
-                          <div className="item-desc">Rong biển sợi giòn & hạt chia organic.</div>
+                          <h3 className="item-name">3. Sâm Mía Lau</h3>
+                          <div className="item-desc">Ngọt thanh rễ tranh & mía lau tươi.</div>
                       </div>
-                      <div className="item-price">25K</div>
+                      <div className="item-price">20K</div>
                   </div>
 
                   <div className="toppings">
