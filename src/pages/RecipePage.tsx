@@ -11,18 +11,38 @@ export default function RecipePage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleCheckIn = () => {
+  const handleCheckIn = async () => {
     if (!staffName) return alert('Vui lòng nhập tên nhân viên!');
     const time = new Date().toLocaleString('vi-VN');
-    setShiftStatus(`Đã check-in lúc: ${time}`);
-    alert(`Xin chào ${staffName}! Chúc bạn một ca làm việc năng suất!`);
+    setShiftStatus(`Đang xử lý Check-in...`);
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+        method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ type: 'checkin', name: staffName })
+      });
+      setShiftStatus(`Đã check-in lúc: ${time}`);
+      alert(`Xin chào ${staffName}! Đã lưu hệ thống. Chúc bạn một ca làm việc năng suất!`);
+    } catch (e) {
+      alert('Lỗi mạng khi Check-in!');
+      setShiftStatus(`Chưa check-in`);
+    }
   };
 
-  const handleCheckOut = () => {
-    if (shiftStatus === 'Chưa check-in') return alert('Bạn chưa check-in!');
+  const handleCheckOut = async () => {
+    if (!shiftStatus.includes('Đã check-in')) return alert('Bạn chưa check-in!');
     const time = new Date().toLocaleString('vi-VN');
-    setShiftStatus(`Đã check-out lúc: ${time}`);
-    alert(`Cảm ơn ${staffName}! Bạn đã hoàn thành ca làm việc.`);
+    setShiftStatus(`Đang xử lý Check-out...`);
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+        method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ type: 'checkout', name: staffName })
+      });
+      setShiftStatus(`Đã check-out lúc: ${time}`);
+      alert(`Cảm ơn ${staffName}! Đã lưu dữ liệu kết thúc ca làm việc.`);
+    } catch (e) {
+      alert('Lỗi mạng khi Check-out!');
+      setShiftStatus(`Đã check-in lúc...`);
+    }
   };
 
   const handleSubmitReport = async (e: React.FormEvent) => {
@@ -31,11 +51,12 @@ export default function RecipePage() {
     
     setIsSubmitting(true);
     try {
-      // Simulate sending report to Apps Script
       const payload = {
+        type: 'report',
         name: staffName,
-        ...reportData,
-        timestamp: new Date().toISOString()
+        revenue: reportData.doanhThu,
+        cash: reportData.tienMat,
+        note: reportData.ghiChu
       };
       
       await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
@@ -44,7 +65,7 @@ export default function RecipePage() {
         headers: {
           "Content-Type": "text/plain",
         },
-        body: JSON.stringify({ idea: `[BÁO CÁO CA - ${staffName}] Doanh thu: ${payload.doanhThu} | Tiền mặt quầy: ${payload.tienMat} | Ghi chú: ${payload.ghiChu}` }),
+        body: JSON.stringify(payload),
       });
       
       alert('Báo cáo đã được gửi thành công cho Cổ Đông!');
