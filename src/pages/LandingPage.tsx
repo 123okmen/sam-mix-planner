@@ -23,7 +23,7 @@ export default function LandingPage() {
                   </div>
                   
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam bong cuc nhan luc.jpg`} alt="Sâm Bông Cúc Nhãn Lục" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_bong_cuc_v2.jpg`} alt="Sâm Bông Cúc Nhãn Lục" />
                       <div className="item-info">
                           <h3 className="item-name">1. Sâm Bông Cúc Nhãn Nhục</h3>
                           <div className="item-desc">Giải nhiệt, an thần, thanh lọc cơ thể.</div>
@@ -32,7 +32,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam cu nang tao do.jpg`} alt="Sâm Củ Năng Táo Đỏ" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_cu_nang_v2.jpg`} alt="Sâm Củ Năng Táo Đỏ" />
                       <div className="item-info">
                           <h3 className="item-name">2. Sâm Củ Năng Táo Đỏ</h3>
                           <div className="item-desc">Giòn mát củ năng, thơm ngọt táo đỏ.</div>
@@ -41,7 +41,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="menu-item">
-                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam mia lau.jpg`} alt="Sâm Mía Lau" />
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_mia_lau_v2.jpg`} alt="Sâm Mía Lau" />
                       <div className="item-info">
                           <h3 className="item-name">3. Sâm Mía Lau</h3>
                           <div className="item-desc">Ngọt thanh rễ tranh & mía lau tươi.</div>

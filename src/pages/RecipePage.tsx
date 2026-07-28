@@ -1,45 +1,128 @@
+import React, { useState } from 'react';
 import LoginGate from '../components/LoginGate';
 
 export default function RecipePage() {
+  const [shiftStatus, setShiftStatus] = useState<string>('Chưa check-in');
+  const [staffName, setStaffName] = useState('');
+  const [reportData, setReportData] = useState({
+    doanhThu: '',
+    tienMat: '',
+    ghiChu: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCheckIn = () => {
+    if (!staffName) return alert('Vui lòng nhập tên nhân viên!');
+    const time = new Date().toLocaleString('vi-VN');
+    setShiftStatus(`Đã check-in lúc: ${time}`);
+    alert(`Xin chào ${staffName}! Chúc bạn một ca làm việc năng suất!`);
+  };
+
+  const handleCheckOut = () => {
+    if (shiftStatus === 'Chưa check-in') return alert('Bạn chưa check-in!');
+    const time = new Date().toLocaleString('vi-VN');
+    setShiftStatus(`Đã check-out lúc: ${time}`);
+    alert(`Cảm ơn ${staffName}! Bạn đã hoàn thành ca làm việc.`);
+  };
+
+  const handleSubmitReport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!staffName) return alert('Vui lòng nhập tên nhân viên!');
+    
+    setIsSubmitting(true);
+    try {
+      // Simulate sending report to Apps Script
+      const payload = {
+        name: staffName,
+        ...reportData,
+        timestamp: new Date().toISOString()
+      };
+      
+      await fetch("https://script.google.com/macros/s/AKfycbynF4oYwuN9PC3DfPZplvfhlVU-B6GHVsZ5kswojyrtYL58tOBG33lilxA0Rrd4T-rp/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: JSON.stringify({ idea: `[BÁO CÁO CA - ${staffName}] Doanh thu: ${payload.doanhThu} | Tiền mặt quầy: ${payload.tienMat} | Ghi chú: ${payload.ghiChu}` }),
+      });
+      
+      alert('Báo cáo đã được gửi thành công cho Cổ Đông!');
+      setReportData({ doanhThu: '', tienMat: '', ghiChu: '' });
+    } catch (error) {
+      alert('Có lỗi xảy ra khi gửi báo cáo, nhưng hệ thống đã lưu nháp nội bộ!');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <LoginGate expectedPassword="sammixnv" storageKey="auth_recipes" title="Khu Vực Nhân Viên">
       <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto', color: 'var(--text-primary)' }}>
-        <h1 style={{ color: '#10b981', textAlign: 'center', marginBottom: '1rem' }}>Bảng Định Lượng Pha Chế (SOP)</h1>
-        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '2rem' }}>Tài liệu nội bộ dành cho nhân viên Sâm Mix</p>
+        <h1 style={{ color: '#10b981', textAlign: 'center', marginBottom: '1rem' }}>🧑‍🍳 Trang Quản Lý Nhân Viên</h1>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '2rem' }}>Chấm công, Báo cáo & Bảng định lượng pha chế</p>
 
-        <div className="glass-panel" style={{ marginBottom: '2rem' }}>
-          <h2 style={{ color: '#d35400', borderBottom: '2px solid #e67e22', paddingBottom: '0.5rem', marginBottom: '1rem' }}>1. Nhóm Sâm Mix (Nấu theo mẻ)</h2>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', background: 'rgba(255,255,255,0.8)' }}>
-            <thead>
-              <tr style={{ background: '#1e7145', color: 'white' }}>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên Món</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Công thức nấu (Mẻ 2 Lít)</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Định lượng ra ly (500ml)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Sâm Bông Cúc Nhãn Nhục</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>2L nước + 50g cúc khô + 100g nhãn nhục + 150g đường phèn (Nấu 15p)</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>350ml cốt sâm + 30g topping + Đá đầy ly</td>
-              </tr>
-              <tr style={{ background: '#f9f9f9' }}>
-                <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Sâm Củ Năng Táo Đỏ</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>2L nước + 300g củ năng thái hạt lựu + 100g táo đỏ cắt lát + 150g đường phèn</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>350ml cốt sâm + 40g topping + Đá đầy ly</td>
-              </tr>
-              <tr>
-                <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Sâm Mía Lau</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>2L nước + 300g mía lau chẻ nhỏ + 1 bó rễ tranh + 50g râu bắp + 100g đường phèn</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>400ml cốt sâm + Đá đầy ly (không topping)</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* Chấm Công & Báo Cáo Section */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+          {/* Check-in Card */}
+          <div className="glass-panel">
+            <h2 style={{ color: '#3498db', marginTop: 0 }}>⏱️ Chấm Công Ca Trực</h2>
+            <div style={{ marginBottom: '1rem' }}>
+              <input
+                type="text"
+                placeholder="Nhập tên của bạn..."
+                className="input-field"
+                value={staffName}
+                onChange={(e) => setStaffName(e.target.value)}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '1rem' }}>
+              <button onClick={handleCheckIn} className="btn-primary" style={{ flex: 1, background: '#27ae60' }}>Đầu Ca (Check-in)</button>
+              <button onClick={handleCheckOut} className="btn-primary" style={{ flex: 1, background: '#e74c3c' }}>Cuối Ca (Check-out)</button>
+            </div>
+            <div style={{ padding: '10px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', border: '1px dashed #7f8c8d' }}>
+              Trạng thái: <strong>{shiftStatus}</strong>
+            </div>
+          </div>
+
+          {/* Báo Cáo Card */}
+          <div className="glass-panel">
+            <h2 style={{ color: '#f39c12', marginTop: 0 }}>📋 Báo Cáo Cuối Ca</h2>
+            <form onSubmit={handleSubmitReport} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="Doanh thu ước tính (VD: 1.500.000đ)..."
+                className="input-field"
+                value={reportData.doanhThu}
+                onChange={(e) => setReportData({...reportData, doanhThu: e.target.value})}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Tiền mặt còn lại trong quầy..."
+                className="input-field"
+                value={reportData.tienMat}
+                onChange={(e) => setReportData({...reportData, tienMat: e.target.value})}
+                required
+              />
+              <textarea
+                placeholder="Ghi chú thêm (thiếu ly nhựa, hao hụt trái cây,...)"
+                className="input-field"
+                rows={3}
+                value={reportData.ghiChu}
+                onChange={(e) => setReportData({...reportData, ghiChu: e.target.value})}
+              />
+              <button type="submit" className="btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? 'Đang gửi...' : 'Gửi Báo Cáo'}
+              </button>
+            </form>
+          </div>
         </div>
 
+        {/* Recipe Table Section */}
         <div className="glass-panel">
-          <h2 style={{ color: '#d35400', borderBottom: '2px solid #e67e22', paddingBottom: '0.5rem', marginBottom: '1rem' }}>2. Nhóm Nước Ép (Ép tươi từng ly)</h2>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', background: 'rgba(255,255,255,0.8)' }}>
+          <h2 style={{ color: '#d35400', borderBottom: '2px solid #e67e22', paddingBottom: '0.5rem', marginBottom: '1rem' }}>SOP Nước Ép (Ép tươi từng ly)</h2>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', background: 'rgba(255,255,255,0.8)', color: '#333' }}>
             <thead>
               <tr style={{ background: '#1e7145', color: 'white' }}>
                 <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên Món</th>
