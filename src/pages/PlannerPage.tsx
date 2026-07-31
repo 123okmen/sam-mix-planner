@@ -66,7 +66,7 @@ export default function PlannerPage() {
       setPlan(newPlan);
 
       // Save ideas to Google Sheets (fire and forget)
-      await fetch("https://script.google.com/macros/s/AKfycbxR2S8zttuU1avpE1fMhSTQkvMzXhovEd0Gu8BTlJtn8ju1YkiNav39tsa-DUlmPS3Z/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbz-75MfvgUDcWexbQ6hJbyT42P3gVm5R6l585fnRMBC8sd_pMZyh9mJbMAa98HpsfAk/exec", {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain" },
