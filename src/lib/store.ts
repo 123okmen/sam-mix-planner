@@ -11,9 +11,9 @@ export interface MenuItem {
 }
 
 export const MENU: MenuItem[] = [
-  { id: 'sam-mia-lau',     name: 'Sâm Mía Lau',          price: 15000, category: 'sam', img: 'sam%20mia%20lau.jpg' },
-  { id: 'sam-bong-cuc',    name: 'Sâm Bông Cúc',         price: 20000, category: 'sam', img: 'sam%20bong%20cuc%20nhan%20luc.jpg' },
-  { id: 'sam-tao-do',      name: 'Sâm Táo Đỏ Long Nhãn', price: 25000, category: 'sam', img: 'sam%20cu%20nang%20tao%20do.jpg' },
+  { id: 'sam-mia-lau',     name: 'Sâm Mía Lau',          price: 15000, category: 'sam', img: 'sam_mia_lau_v2.jpg' },
+  { id: 'sam-bong-cuc',    name: 'Sâm Bông Cúc',         price: 20000, category: 'sam', img: 'sam_bong_cuc_v2.jpg' },
+  { id: 'sam-tao-do',      name: 'Sâm Táo Đỏ Long Nhãn', price: 25000, category: 'sam', img: 'sam_cu_nang_v2.jpg' },
   { id: 'sam-rong-bien',   name: 'Sâm Rong Biển Hạt Chia', price: 25000, category: 'sam', img: 'sam_mix_topping_1784433169722.png' },
   { id: 'ep-cam',          name: 'Cam Sành Miền Tây',    price: 25000, category: 'ep',  img: 'cam.jpg' },
   { id: 'ep-ca-rot',       name: 'Cà Rốt Đà Lạt',        price: 20000, category: 'ep',  img: 'carot.jpg' },
