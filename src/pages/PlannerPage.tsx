@@ -1,141 +1,124 @@
-import { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { generatePlan } from '../lib/gemini';
+import { useEffect, useRef, useState } from 'react';
+import Chart from 'chart.js/auto';
 import LoginGate from '../components/LoginGate';
 
-const ApiKeyModal = ({ onSave }: { onSave: (key: string) => void }) => {
-  const [key, setKey] = useState('');
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmLARXli9r4FVQ6kw3oFaPYN5mO2qnL1WlGRzPRUfvTZOh8eoCE31C4BnjkZ7iJ6Vq/exec?action=data';
 
-  return (
-    <div className="modal-overlay">
-      <div className="glass-panel modal-content">
-        <h2 style={{ marginTop: 0 }}>Kết Nối AI</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>Vui lòng nhập API Key của bạn (hỗ trợ Gemini, Groq, OpenAI). Hệ thống sẽ tự động nhận diện. Key được lưu bảo mật trên trình duyệt của bạn.</p>
-        <input 
-          type="text" 
-          className="input-field" 
-          placeholder="Nhập API Key (AIza..., gsk_..., sk-...)" 
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
-          style={{ marginBottom: '1rem' }}
-        />
-        <button 
-          className="btn-primary" 
-          onClick={() => onSave(key)}
-          disabled={!key.trim()}
-          style={{ width: '100%' }}
-        >
-          Lưu & Bắt Đầu
-        </button>
-      </div>
-    </div>
-  );
-};
+const fmt = (v: number) => (v || 0).toLocaleString('vi-VN') + ' d';
 
 export default function PlannerPage() {
-  const [apiKey, setApiKey] = useState<string | null>(null);
-  const [idea, setIdea] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [plan, setPlan] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<string>('');
+
+  const chGio = useRef<HTMLCanvasElement>(null);
+  const chNV = useRef<HTMLCanvasElement>(null);
+  const ch7 = useRef<HTMLCanvasElement>(null);
+  const chartsRef = useRef<Chart[]>([]);
+
+  const load = async () => {
+    try {
+      const r = await fetch(API_URL);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.msg || 'Loi API');
+      setData(j);
+      setErr(null);
+      setLastUpdate(new Date().toLocaleTimeString('vi-VN'));
+    } catch (e: any) {
+      setErr(e.message || 'Khong tai duoc du lieu');
+    }
+  };
 
   useEffect(() => {
-    const savedKey = localStorage.getItem('universal_api_key');
-    if (savedKey) {
-      setApiKey(savedKey);
-    }
+    load();
+    const id = setInterval(load, 30000);
+    return () => clearInterval(id);
   }, []);
 
-  const handleSaveKey = (key: string) => {
-    localStorage.setItem('universal_api_key', key);
-    setApiKey(key);
-  };
+  useEffect(() => {
+    if (!data) return;
+    chartsRef.current.forEach(c => c.destroy());
+    chartsRef.current = [];
 
-  const handleChangeKey = () => {
-    localStorage.removeItem('universal_api_key');
-    setApiKey(null);
-  };
+    const gio = data.gio || { keys: [], vals: [] };
+    const nv = data.nv || { names: [], vals: [], don: [] };
+    const ngay = data.ngay || { keys: [], vals: [] };
 
-  const handleGenerate = async () => {
-    if (!idea.trim()) return;
-    
-    setLoading(true);
-    setError(null);
-    try {
-      const newPlan = await generatePlan(apiKey!, idea);
-      setPlan(newPlan);
+    const mk = (el: HTMLCanvasElement | null, cfg: any) => {
+      if (!el) return;
+      chartsRef.current.push(new Chart(el, cfg));
+    };
 
-      // Save ideas to Google Sheets (fire and forget)
-      await fetch("https://script.google.com/macros/s/AKfycbz-75MfvgUDcWexbQ6hJbyT42P3gVm5R6l585fnRMBC8sd_pMZyh9mJbMAa98HpsfAk/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({ ideas: idea, plan: newPlan })
-      }).catch(err => console.error("Failed to sync with Google Sheets", err));
+    mk(chGio.current, {
+      type: 'line',
+      data: { labels: gio.keys, datasets: [{ label: 'Doanh thu', data: gio.vals, borderColor: '#69f0ae', backgroundColor: 'rgba(105,240,174,.15)', fill: true, tension: .4, pointRadius: 4 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cfd8dc' } }, tooltip: { callbacks: { label: (c: any) => ' ' + fmt(c.parsed.y) } } }, scales: { x: { ticks: { color: '#cfd8dc' } }, y: { ticks: { color: '#cfd8dc', callback: (v: any) => (v / 1000) + 'k' } } } }
+    });
 
-    } catch (err: any) {
-      setError(err.message || 'Có lỗi xảy ra');
-    } finally {
-      setLoading(false);
-    }
-  };
+    mk(chNV.current, {
+      type: 'bar',
+      data: { labels: nv.names, datasets: [
+        { label: 'Doanh thu', data: nv.vals, backgroundColor: '#40c4ff', borderRadius: 6 },
+        { label: 'So don', data: nv.don, backgroundColor: '#ffd740', borderRadius: 6 }
+      ] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cfd8dc' } }, tooltip: { callbacks: { label: (c: any) => c.dataset.label + ': ' + (c.dataset.label === 'Doanh thu' ? fmt(c.parsed.y) : c.parsed.y + ' don') } } }, scales: { x: { ticks: { color: '#cfd8dc' } }, y: { ticks: { color: '#cfd8dc', callback: (v: any) => (v / 1000) + 'k' } } } }
+    });
+
+    mk(ch7.current, {
+      type: 'bar',
+      data: { labels: ngay.keys, datasets: [{ label: 'Doanh thu', data: ngay.vals, backgroundColor: '#ff80ab', borderRadius: 6 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cfd8dc' } }, tooltip: { callbacks: { label: (c: any) => ' ' + fmt(c.parsed.y) } } }, scales: { x: { ticks: { color: '#cfd8dc' } }, y: { ticks: { color: '#cfd8dc', callback: (v: any) => (v / 1000) + 'k' } } } }
+    });
+  }, [data]);
 
   return (
     <LoginGate expectedPassword="sammixgymer" storageKey="auth_planner" title="Khu Vực Cổ Đông">
-      <div style={{ padding: '2rem' }}>
-        {!apiKey && <ApiKeyModal onSave={handleSaveKey} />}
-      
-      <header style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
-        <button onClick={handleChangeKey} style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>⚙️ Đổi API Key</button>
-        <h1 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#10b981' }}>Sâm Mix Planner</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '1.5rem' }}>Hệ thống AI tổng hợp ý tưởng cổ đông & thiết lập kế hoạch</p>
-        <a href={`${import.meta.env.BASE_URL}Lo_Trinh_Kinh_Doanh.pdf`} download="Lo_Trinh_Kinh_Doanh_V4.pdf" style={{ display: 'inline-block', background: '#d35400', color: 'white', padding: '10px 20px', borderRadius: '8px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-          📄 Tải Xuống Bản Kế Hoạch V4 (PDF)
-        </a>
-      </header>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-        
-        {/* Cột Trái: Nhập Ý Tưởng */}
-        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <h3>💡 Thêm Ý Tưởng Mới</h3>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-            Dữ liệu gốc (60m2 KDC Conic, vốn 80tr, vận hành ca gãy) đã được AI nạp sẵn.
+      <div style={{ padding: '1.5rem', maxWidth: 960, margin: '0 auto' }}>
+        <header style={{ textAlign: 'center', marginBottom: '1.5rem', position: 'relative' }}>
+          <h1 style={{ fontSize: '2rem', margin: '0 0 0.3rem 0', color: '#10b981' }}>🧃 Sâm Mix — Báo Cáo Cổ Đông</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '0.8rem' }}>
+            Doanh thu real-time · Quản lý nhân viên {lastUpdate ? '· Cập nhật lúc ' + lastUpdate : ''}
           </p>
-          <textarea 
-            className="input-field" 
-            rows={6}
-            placeholder="Ví dụ: Tôi muốn bổ sung thêm món bánh mì vào buổi sáng, và thay đổi giờ đóng cửa tối thành 23h..."
-            value={idea}
-            onChange={(e) => setIdea(e.target.value)}
-          />
-          <button 
-            className="btn-primary" 
-            onClick={handleGenerate}
-            disabled={loading || !idea.trim()}
-          >
-            {loading ? 'AI Đang Xử Lý...' : 'Tạo Kế Hoạch Bằng AI'}
-          </button>
-          {error && <div style={{ color: '#ef4444', marginTop: '1rem', fontSize: '0.9rem' }}>{error}</div>}
+          <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <span style={{ background: '#00c853', color: '#fff', padding: '4px 14px', borderRadius: 20, fontSize: 12, fontWeight: 'bold' }}>🟢 LIVE — tự động cập nhật 30s</span>
+            <a href={`${import.meta.env.BASE_URL}Lo_Trinh_Kinh_Doanh.pdf`} download="Lo_Trinh_Kinh_Doanh_V4.pdf" style={{ background: '#d35400', color: 'white', padding: '6px 14px', borderRadius: 8, textDecoration: 'none', fontWeight: 'bold', fontSize: '0.9rem' }}>
+              📄 Tải Kế Hoạch V4 (PDF)
+            </a>
+          </div>
+        </header>
+
+        {err ? <div style={{ background: 'rgba(239,68,68,.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '10px 14px', borderRadius: 10, marginBottom: '1rem', fontSize: '0.9rem' }}>⚠️ {err}</div> : null}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: '1.2rem' }}>
+          {[
+            { label: 'Doanh thu', val: fmt(data?.kpi?.doanhThu), color: '#69f0ae' },
+            { label: 'Tiền mặt', val: fmt(data?.kpi?.tienMat), color: '#ffd740' },
+            { label: 'Số đơn', val: String(data?.kpi?.soDon ?? 0), color: '#40c4ff' },
+            { label: 'Số món', val: String(data?.kpi?.soMon ?? 0), color: '#ff80ab' },
+          ].map(k => (
+            <div key={k.label} style={{ background: 'rgba(255,255,255,.08)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', border: '1px solid var(--glass-border)' }}>
+              <div style={{ fontSize: 11, opacity: .75, textTransform: 'uppercase', letterSpacing: .5 }}>{k.label}</div>
+              <div style={{ fontSize: 22, fontWeight: 'bold', marginTop: 6, color: k.color }}>{k.val}</div>
+            </div>
+          ))}
         </div>
 
-        {/* Cột Phải: Hiển Thị Kế Hoạch */}
-        <div className="glass-panel markdown-body" style={{ minHeight: '400px' }}>
-          {loading ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-secondary)' }}>
-              Đang phân tích ý tưởng và tổng hợp...
+        {[
+          { title: '📈 Doanh thu theo giờ — hôm nay', ref: chGio },
+          { title: '👥 Quản lý nhân viên — doanh thu & số đơn', ref: chNV },
+          { title: '📅 Doanh thu 7 ngày gần nhất', ref: ch7 },
+        ].map(s => (
+          <div key={s.title} style={{ background: 'rgba(255,255,255,.06)', borderRadius: 14, padding: '14px 16px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
+            <h3 style={{ fontSize: 15, margin: '0 0 10px 0', borderBottom: '1px solid rgba(255,255,255,.15)', paddingBottom: 8 }}>{s.title}</h3>
+            <div style={{ position: 'relative', height: 260, width: '100%' }}>
+              <canvas ref={s.ref} />
             </div>
-          ) : plan ? (
-            <ReactMarkdown>{plan}</ReactMarkdown>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-secondary)' }}>
-              Bản kế hoạch hoàn chỉnh sẽ hiển thị tại đây.
-            </div>
-          )}
-        </div>
-        
+          </div>
+        ))}
+
+        <p style={{ textAlign: 'center', fontSize: 11, opacity: .5, padding: 8 }}>Sâm Mix Dashboard · Tự động làm mới mỗi 30 giây</p>
       </div>
-    </div>
     </LoginGate>
   );
 }
