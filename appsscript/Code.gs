@@ -103,7 +103,7 @@ function handleShift(data, type) {
   var sheet = getOrCreateSheet('Cham cong', headers);
   var t = nowParts();
   var label = type === 'checkin' ? 'CHECK-IN' : 'CHECK-OUT';
-  sheet.appendRow([t.ngayDate, t.gio, data.name || data.staff || '', label, t.ca, data.note || '']);
+  sheet.appendRow([Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'), t.gio, data.name || data.staff || '', label, t.ca, data.note || '']);
 
   var r = sheet.getLastRow();
   var cell = sheet.getRange(r, 4);
@@ -112,7 +112,7 @@ function handleShift(data, type) {
   } else {
     cell.setBackground('#f4cccc').setFontColor('#cc0000').setFontWeight('bold');
   }
-  sheet.getRange(r, 2).setNumberFormat('HH:mm:ss');
+  sheet.getRange(r, 2).setNumberFormat('@');
   sheet.autoResizeColumns(1, 5);
   var emo = (type === 'checkin') ? String.fromCodePoint(0x2705) : String.fromCodePoint(0x1F534);
   sendTelegram(emo + ' ' + label + ': ' + (data.name || data.staff) + ' luc ' + t.gio + ' (' + t.ca + ')');
@@ -163,7 +163,7 @@ function handleOrder(data) {
   var orderId = String(data.orderId || data.id || ('DH' + Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'HHmmss')));
   sheet.appendRow([
     orderId,
-    t.ngayDate,
+    Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
     t.gio,
     data.staff || data.name || '',
     shiftTxt,
@@ -183,8 +183,8 @@ function handleOrder(data) {
   sheet.getRange(r, 6).setWrap(true).setVerticalAlignment('top');
   if (sheet.getLastRow() > 1) {
     var lastRowD = sheet.getLastRow();
-    sheet.getRange(2, 2, lastRowD - 1, 1).setNumberFormat('dd/MM/yyyy');
-    sheet.getRange(2, 3, lastRowD - 1, 1).setNumberFormat('HH:mm:ss');
+    sheet.getRange(2, 2, lastRowD - 1, 1).setNumberFormat('@');
+    sheet.getRange(2, 3, lastRowD - 1, 1).setNumberFormat('@');
   }
   sheet.autoResizeColumns(1, 7);
   return jsonOk('Da luu don hang ' + orderId + ' (' + soMon + ' mon, ' + moneyFmt(data.total) + ')');
@@ -195,7 +195,7 @@ function handleReport(data) {
   var sheet = getOrCreateSheet('Bao cao doanh thu', headers);
   var t = nowParts();
   sheet.appendRow([
-    t.ngayDate,
+    Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
     t.gio,
     data.name || data.staff || '',
     t.ca,
@@ -209,7 +209,7 @@ function handleReport(data) {
   var r = sheet.getLastRow();
   sheet.getRange(r, 5).setNumberFormat('#,##0" d"').setFontWeight('bold');
   sheet.getRange(r, 6).setNumberFormat('#,##0" d"');
-  sheet.getRange(r, 2).setNumberFormat('HH:mm:ss');
+  sheet.getRange(r, 2).setNumberFormat('@');
   sheet.autoResizeColumns(1, 5);
   return jsonOk('Da luu bao cao doanh thu ' + moneyFmt(data.revenue || data.doanh_thu) + ' cho ' + (data.name || data.staff || ''));
 }

@@ -62,6 +62,7 @@ export default function StaffPage() {
     if (!staff.trim()) { alert('Vui lòng nhập tên nhân viên bán hàng!'); return; }
     if (cart.length === 0) { alert('Chưa có món nào trong đơn!'); return; }
     const order: Order = {
+      paymentMethod,
       id: 'DH' + Date.now().toString().slice(-8),
       time: new Date().toISOString(),
       staff: staff.trim(),
