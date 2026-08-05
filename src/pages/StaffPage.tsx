@@ -349,27 +349,27 @@ export default function StaffPage() {
               <tbody>
                 <tr>
                   <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cam Sành</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cam (2-3 quả) + 30ml nước đường mật mía + Đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cam (2–3 quả) + 30ml nước đường mật mía + đá</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 1 xíu muối tinh để vị đậm đà</td>
                 </tr>
                 <tr style={{ background: '#f9f9f9' }}>
                   <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cà Rốt</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cà rốt (2-3 củ) + 20ml nước đường mật mía + Đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cà rốt (2–3 củ) + 20ml nước đường mật mía + đá</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 10ml nước cốt chanh để không bị ngái</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Dứa Mật</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dứa (1/2 quả lớn) + 20ml nước đường mật mía + Đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dứa (1/2 quả lớn) + 20ml nước đường mật mía + đá</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 5ml cốt tắc để tăng độ thơm</td>
                 </tr>
                 <tr style={{ background: '#f9f9f9' }}>
                   <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cóc Non</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cóc (3-4 quả) + 35ml nước đường mật mía + Đá</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>Bắt buộc có muối tinh liều lượng nhỏ xíu</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cóc (3–4 quả) + 35ml nước đường mật mía + đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>Bắt buộc có muối tinh liều lượng nhỏ</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cần Tây Mix Táo</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cần tây + 50ml cốt táo + 10ml nước đường mật mía + Đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cần tây + 50ml cốt táo + 10ml nước đường mật mía + đá</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Ép cùng 1 lát gừng mỏng để khử mùi hăng</td>
                 </tr>
               </tbody>
