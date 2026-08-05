@@ -11,15 +11,15 @@ export interface MenuItem {
 }
 
 export const MENU: MenuItem[] = [
-  { id: 'sam-mia-lau',     name: 'Sâm Mía Lau',          price: 20000, category: 'sam', img: 'sam_mia_lau_v2.jpg' },
+  { id: 'sam-mia-lau',     name: 'Sâm Mía Lau',          price: 15000, category: 'sam', img: 'sam_mia_lau_v2.jpg' },
   { id: 'sam-bong-cuc',    name: 'Sâm Bông Cúc',         price: 20000, category: 'sam', img: 'sam_bong_cuc_v2.jpg' },
-  { id: 'sam-tao-do',      name: 'Sâm Táo Đỏ Long Nhãn', price: 20000, category: 'sam', img: 'sam_cu_nang_v2.jpg' },
-  { id: 'ep-dua-hau',     name: 'Nước Ép Dưa Hấu',       price: 15000, category: 'ep',  img: 'dua_hau.jpg' },
-  { id: 'ep-cam',          name: 'Cam Sành Miền Tây',    price: 15000, category: 'ep',  img: 'cam.jpg' },
+  { id: 'sam-tao-do',      name: 'Sâm Táo Đỏ Long Nhãn', price: 25000, category: 'sam', img: 'sam_cu_nang_v2.jpg' },
+  { id: 'sam-rong-bien',   name: 'Sâm Rong Biển Hạt Chia', price: 25000, category: 'sam', img: 'sam_mix_topping_1784433169722.png' },
+  { id: 'ep-cam',          name: 'Cam Sành Miền Tây',    price: 25000, category: 'ep',  img: 'cam.jpg' },
   { id: 'ep-ca-rot',       name: 'Cà Rốt Đà Lạt',        price: 20000, category: 'ep',  img: 'carot.jpg' },
   { id: 'ep-dua',          name: 'Dứa Mật',              price: 20000, category: 'ep',  img: 'dua.jpeg' },
   { id: 'ep-coc',          name: 'Cóc Non',               price: 20000, category: 'ep',  img: 'coc.jpeg' },
-  { id: 'ep-can-tay',      name: 'Cần Tây Mix Táo',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
+  { id: 'ep-can-tay',      name: 'Cần Tây Mix Táo',      price: 30000, category: 'ep',  img: 'cantay.JPG' },
 ];
 
 export interface OrderLine {
@@ -30,7 +30,6 @@ export interface OrderLine {
 }
 
 export interface Order {
-  paymentMethod?: 'tienmat' | 'chuyenkhoan';
   id: string;
   time: string;
   staff: string;

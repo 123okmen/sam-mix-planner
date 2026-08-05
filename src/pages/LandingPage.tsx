@@ -34,13 +34,14 @@ export default function LandingPage() {
               {/* Sâm Mix Column */}
               <div className="column">
                   <div className="col-title">
-                      🌿 Sâm Mix Thảo Mộc
+                      🌿 NƯỚC SÂM THẢO MỘC
                   </div>
                   
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_bong_cuc_v2.jpg`} alt="Sâm Bông Cúc Nhãn Lục" />
                       <div className="item-info">
                           <h3 className="item-name">1. Sâm Bông Cúc Nhãn Nhục</h3>
+                              <div className="item-note">Thanh nhiệt, mát gan · ngủ ngon</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
@@ -49,6 +50,7 @@ export default function LandingPage() {
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_cu_nang_v2.jpg`} alt="Sâm Củ Năng Táo Đỏ" />
                       <div className="item-info">
                           <h3 className="item-name">2. Sâm Củ Năng Táo Đỏ</h3>
+                              <div className="item-note">Bồi bổ khí huyết · giảm mệt mỏi</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
@@ -57,30 +59,43 @@ export default function LandingPage() {
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}sam_mia_lau_v2.jpg`} alt="Sâm Mía Lau" />
                       <div className="item-info">
                           <h3 className="item-name">3. Sâm Mía Lau</h3>
+                              <div className="item-note">Thanh nhiệt · bổ sung năng lượng</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
+
 
               </div>
 
               {/* Nước Ép Column */}
               <div className="column">
                   <div className="col-title">
-                      🍊 Nước Ép Nguyên Chất
+                      🍊 NƯỚC ÉP TRÁI CÂY TƯƠI
                   </div>
                   
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}cam.jpg`} alt="Cam Sành" />
                       <div className="item-info">
                           <h3 className="item-name">1. Cam Sành Miền Tây</h3>
+                              <div className="item-note">Vitamin C · kháng khuẩn, đẹp da</div>
                       </div>
-                      <div className="item-price">25K</div>
+                      <div className="item-price">15K</div>
+                  </div>
+
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}dua_hau.jpg`} alt="Nước Ép Dưa Hấu" />
+                      <div className="item-info">
+                          <h3 className="item-name">2. Nước Ép Dưa Hấu</h3>
+                              <div className="item-note">Giải nhiệt, tốt tim · giàu lycopene</div>
+                      </div>
+                      <div className="item-price">15K</div>
                   </div>
 
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}carot.jpg`} alt="Cà Rốt" />
                       <div className="item-info">
-                          <h3 className="item-name">2. Cà Rốt Đà Lạt</h3>
+                          <h3 className="item-name">3. Cà Rốt Đà Lạt</h3>
+                              <div className="item-note">Beta-caroten · sáng mắt, đẹp da</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
@@ -88,7 +103,8 @@ export default function LandingPage() {
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}dua.jpeg`} alt="Dứa" />
                       <div className="item-info">
-                          <h3 className="item-name">3. Dứa Mật</h3>
+                          <h3 className="item-name">4. Dứa Mật</h3>
+                              <div className="item-note">Hỗ trợ tiêu hoá · giàu vitamin</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
@@ -96,7 +112,8 @@ export default function LandingPage() {
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}coc.jpeg`} alt="Cóc" />
                       <div className="item-info">
-                          <h3 className="item-name">4. Cóc Non</h3>
+                          <h3 className="item-name">5. Cóc Non</h3>
+                              <div className="item-note">Vitamin C · tăng đề kháng</div>
                       </div>
                       <div className="item-price">20K</div>
                   </div>
@@ -104,9 +121,10 @@ export default function LandingPage() {
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}cantay.JPG`} alt="Cần Tây" />
                       <div className="item-info">
-                          <h3 className="item-name">5. Cần Tây Mix Táo</h3>
+                          <h3 className="item-name">6. Cần Tây Mix Táo</h3>
+                              <div className="item-note">Kali, chất xơ · ổn định huyết áp</div>
                       </div>
-                      <div className="item-price">30K</div>
+                      <div className="item-price">25K</div>
                   </div>
               </div>
           </div>
