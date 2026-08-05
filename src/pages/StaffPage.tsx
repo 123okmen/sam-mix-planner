@@ -126,6 +126,13 @@ export default function StaffPage() {
     alert(ok ? `Cảm ơn ${staff}! Đã lưu dữ liệu kết thúc ca làm việc.` : 'Lỗi mạng khi Check-out!');
   };
 
+  const handleSendSummary = async () => {
+    setIsSubmitting(true);
+    const ok = await postJson({ type: 'summary' });
+    alert(ok ? '🚀 Đã gửi tổng kết tất cả đơn hàng & doanh thu hôm nay qua Telegram cho Cổ Đông!' : 'Có lỗi mạng khi gửi tổng me!');
+    setIsSubmitting(false);
+  };
+
   const handleSubmitReport = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
@@ -365,7 +372,25 @@ export default function StaffPage() {
 
         {tab === 'report' && (
           <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h2 style={{ color: '#f39c12', marginTop: 0 }}>📋 Báo Cáo Cuối Ca</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.8rem' }}>
+              <h2 style={{ color: '#f39c12', margin: 0 }}>📋 Báo Cáo Cuối Ca</h2>
+              <button type="button" onClick={handleSendSummary} disabled={isSubmitting} className="btn-primary"
+                style={{ background: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)', padding: '0.5rem 1rem', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                🚀 Gửi Tổng Hợp Nhanh (Telegram)
+              </button>
+            </div>
+
+            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '6px' }}>💡 Dữ liệu hệ thống ghi nhận hôm nay:</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '0.95rem' }}>
+                <span>Tổng đơn: <span style={{ color: '#3498db' }}>{apiOrders} đơn</span></span>
+                <span>Doanh thu hệ thống: <span style={{ color: '#2ecc71' }}>{fmtVND(apiRevenue)}</span></span>
+              </div>
+              <button type="button" onClick={() => setReportData({ ...reportData, doanhThu: apiRevenue.toString() })}
+                style={{ marginTop: '8px', background: 'transparent', border: '1px dashed #2ecc71', color: '#2ecc71', padding: '4px 10px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', width: '100%' }}>
+                ⚡ Tự điền Doanh Thu Hệ Thống ({fmtVND(apiRevenue)}) vào báo cáo
+              </button>
+            </div>
             <form onSubmit={handleSubmitReport} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <input type="text" placeholder="Doanh thu ước tính (VD: 1.500.000đ)..." className="input-field"
                 value={reportData.doanhThu} onChange={e => setReportData({ ...reportData, doanhThu: e.target.value })} required />
