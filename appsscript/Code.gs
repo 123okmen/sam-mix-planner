@@ -191,7 +191,7 @@ function handleOrder(data) {
 }
 // ================= BAO CAO DOANH THU =================
 function handleReport(data) {
-  var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu'];
+  var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Tien chuyen khoan', 'Ghi chu'];
   var sheet = getOrCreateSheet('Bao cao doanh thu', headers);
   var t = nowParts();
   sheet.appendRow([
@@ -201,6 +201,7 @@ function handleReport(data) {
     t.ca,
     num(data.revenue || data.doanh_thu),
     num(data.cash || data.tien_mat),
+    num(data.transfer || data.tien_chuyen_khoan),
     data.note || data.ghi_chu || ''
   ]);
 
@@ -316,7 +317,7 @@ function handleReset() {
   // Setup lai header DUNG THEO TRUONG truoc khi xoa du lieu
   getOrCreateSheet('Don hang', ['Ma don', 'Ngay', 'Gio', 'Nhan vien', 'Ca', 'Mon hang (chi tiet)', 'So mon', 'Tong tien', 'Tien khach', 'Tien thoi', 'Ghi chu']);
   getOrCreateSheet('Cham cong', ['Ngay', 'Gio', 'Ten nhan vien', 'Thao tac', 'Ca', 'Ghi chu']);
-  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu']);
+  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Tien chuyen khoan', 'Ghi chu']);
   var names = ['Don hang', 'Cham cong', 'Bao cao doanh thu'];
   var msgs = [];
   for (var i = 0; i < names.length; i++) {

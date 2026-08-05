@@ -127,7 +127,10 @@ export default function StaffPage() {
     setIsSubmitting(true);
     const ok = await postJson({
       type: 'report', staff: staff.trim(),
-      doanh_thu: reportData.doanhThu, tien_mat: reportData.tienMat, ghi_chu: reportData.ghiChu
+      doanh_thu: reportData.doanhThu,
+      tien_mat: reportData.tienMat,
+      tien_chuyen_khoan: reportData.tienChuyenKhoan,
+      ghi_chu: reportData.ghiChu
     });
     alert(ok ? 'Báo cáo đã được gửi thành công cho Cổ Đông!' : 'Có lỗi xảy ra khi gửi báo cáo!');
     if (ok) setReportData({ doanhThu: '', tienMat: '', tienChuyenKhoan: '', ghiChu: '' });

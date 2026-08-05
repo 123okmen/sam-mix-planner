@@ -74,6 +74,7 @@ export async function syncOrder(order: Order): Promise<boolean> {
         orderId: order.id,
         staff: order.staff,
         shift: order.shift,
+        paymentMethod: order.paymentMethod || 'tienmat',
         items: order.lines.map(l => l.name + 'x' + l.qty).join(', '),
         detail: JSON.stringify(order.lines.map(l => ({ name: l.name, qty: l.qty, price: l.price }))),
         total: order.total,
