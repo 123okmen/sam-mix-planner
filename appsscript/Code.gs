@@ -172,8 +172,7 @@ function handleOrder(data) {
     t.gio,
     data.staff || data.name || '',
     shiftTxt,
-    lines.join('
-'),
+    lines.join('\n'),
     soMon,
     num(data.total),
     num(data.cash),
@@ -271,7 +270,6 @@ function handleSummary(data) {
   }
 
   sendTelegram(lines.join('\n'));
-
   return jsonOk('Da gui tong ket real-time');
 }
 // ================= TELEGRAM REAL-TIME =================
@@ -298,7 +296,7 @@ function sendTelegram(text) {
 function tgOrderMsg(data, lines, soMon, shiftTxt, t, orderId) {
   var msg = String.fromCodePoint(0x1F6D2) + ' DON MOI #' + orderId
           + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F464) + ' ' + (data.staff || data.name || '?') + ' | ' + shiftTxt + ' | ' + t.gio
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F9FE) + ' ' + lines.join('; ')
+    lines.join('\n'),
           + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B0) + ' Tong: ' + moneyFmt(data.total);
   if (data.cash) msg += String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B5) + ' Khach dua: ' + moneyFmt(data.cash);
   var note = data.note || data.ghi_chu;
