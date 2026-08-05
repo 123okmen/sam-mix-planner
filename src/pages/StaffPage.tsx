@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import LoginGate from '../components/LoginGate';
-import { MENU, saveOrder, syncOrder, getShift, fmtVND } from '../lib/store';
+import { MENU, saveOrder, deleteOrder, syncOrder, getShift, fmtVND } from '../lib/store';
 import type { Order, OrderLine } from '../lib/store';
 
 const API = 'https://script.google.com/macros/s/AKfycbyETg2znWnDrNsgq3G2eB0IJxFeb_GdLKo5N68FkFlJVMvTzdt_M_C3YFzL7fcgiyY1/exec';
@@ -94,6 +94,20 @@ export default function StaffPage() {
       setEditingOrderId(null);
     }
     setTimeout(() => setToast(''), 4000);
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa đơn ' + orderId + ' không?')) {
+      deleteOrder(orderId);
+      setRecentOrders(prev => prev.filter(o => o.id !== orderId));
+      if (editingOrderId === orderId) {
+        setEditingOrderId(null);
+        setCart([]);
+        setCash('');
+      }
+      setToast('ĐÃ XÓA ĐƠN ' + orderId + '!');
+      setTimeout(() => setToast(''), 3000);
+    }
   };
 
   const editOrder = (o: Order) => {
@@ -383,10 +397,16 @@ export default function StaffPage() {
                           {fmtVND(o.total || 0)}
                         </td>
                         <td style={{ padding: '8px', textAlign: 'center' }}>
-                          <button className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.8rem', background: '#3498db' }}
-                            onClick={() => editOrder(o)}>
-                            ✏️ Sửa
-                          </button>
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                            <button className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.8rem', background: '#3498db' }}
+                              onClick={() => editOrder(o)}>
+                              ✏️ Sửa
+                            </button>
+                            <button className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.8rem', background: '#e74c3c' }}
+                              onClick={() => handleDeleteOrder(o.id)}>
+                              🗑️ Xóa
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

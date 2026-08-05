@@ -106,3 +106,8 @@ export function fmtTime(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
+
+export function deleteOrder(orderId: string) {
+  const orders = getOrders().filter(o => o.id !== orderId);
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
