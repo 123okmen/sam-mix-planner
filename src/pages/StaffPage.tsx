@@ -26,6 +26,17 @@ export default function StaffPage() {
   const [apiOrders, setApiOrders] = useState(0);
 
 
+  const fetchSystemData = async () => {
+    try {
+      const r = await fetch(API + '?action=data', { headers: { 'Accept': 'application/json' } });
+      const d = await r.json();
+      if (d && d.kpi) {
+        setApiRevenue(d.kpi.doanhThu || 0);
+        setApiOrders(d.kpi.soDon || 0);
+      }
+    } catch {}
+  };
+
   useEffect(() => {
     // Load local orders for shift calculation
     try {
@@ -33,20 +44,9 @@ export default function StaffPage() {
       if (stored) setRecentOrders(JSON.parse(stored));
     } catch {}
 
-    let alive = true;
-    const load = async () => {
-      try {
-        const r = await fetch(API + '?action=data', { headers: { 'Accept': 'application/json' } });
-        const d = await r.json();
-        if (alive && d && d.kpi) {
-          setApiRevenue(d.kpi.doanhThu || 0);
-          setApiOrders(d.kpi.soDon || 0);
-        }
-      } catch { /* bo qua loi mang */ }
-    };
-    load();
-    const t = setInterval(load, 30000);
-    return () => { alive = false; clearInterval(t); };
+    fetchSystemData();
+    const t = setInterval(fetchSystemData, 15000);
+    return () => clearInterval(t);
   }, []);
 
   const addItem = (id: string, name: string, price: number) => {
@@ -92,6 +92,7 @@ export default function StaffPage() {
     if (ok) {
       setRecentOrders(prev => [order, ...prev.filter(o => o.id !== order.id)]);
       setEditingOrderId(null);
+      setTimeout(fetchSystemData, 1500);
     }
     setTimeout(() => setToast(''), 4000);
   };
@@ -108,6 +109,9 @@ export default function StaffPage() {
       setToast('ĐANG XÓA ĐƠN TRÊN GOOGLE SHEETS...');
       const ok = await syncDeleteOrder(orderId);
       setToast(ok ? 'ĐÃ XÓA ĐƠN ' + orderId + ' THÀNH CÔNG!' : 'ĐÃ XÓA CỤC BỘ (LỖI MẠNG ĐỒNG BỘ)');
+      if (ok) {
+        setTimeout(fetchSystemData, 1500);
+      }
       setTimeout(() => setToast(''), 3500);
     }
   };
