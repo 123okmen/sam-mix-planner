@@ -20,6 +20,7 @@ export default function StaffPage() {
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<"tienmat" | "chuyenkhoan">("tienmat");
   const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
+  const [isPromo10k, setIsPromo10k] = useState<boolean>(false);
 
   const [apiRevenue, setApiRevenue] = useState(0);
   const [apiOrders, setApiOrders] = useState(0);
@@ -43,10 +44,13 @@ export default function StaffPage() {
   }, []);
 
   const addItem = (id: string, name: string, price: number) => {
+    const finalPrice = isPromo10k ? 10000 : price;
+    const itemKey = isPromo10k ? id + '_10k' : id;
+    const itemName = isPromo10k ? name + ' (Khai Trương 10K)' : name;
     setCart(prev => {
-      const found = prev.find(l => l.id === id);
-      if (found) return prev.map(l => l.id === id ? { ...l, qty: l.qty + 1 } : l);
-      return [...prev, { id, name, price, qty: 1 }];
+      const found = prev.find(l => l.id === itemKey);
+      if (found) return prev.map(l => l.id === itemKey ? { ...l, qty: l.qty + 1 } : l);
+      return [...prev, { id: itemKey, name: itemName, price: finalPrice, qty: 1 }];
     });
   };
 
@@ -173,6 +177,40 @@ export default function StaffPage() {
         </div>
 
         {tab === 'pos' && (<>
+          {/* Toggle Khai Trương 10K */}
+          <div className="glass-panel" style={{
+            marginBottom: '1.2rem', padding: '0.8rem 1.2rem', display: 'flex', alignItems: 'center',
+            justifyContent: 'space-between', background: isPromo10k ? 'linear-gradient(90deg, #d35400 0%, #e67e22 100%)' : 'rgba(255,255,255,0.06)',
+            borderRadius: '14px', border: isPromo10k ? '1px solid #f39c12' : '1px solid var(--glass-border)',
+            transition: 'all 0.3s ease', cursor: 'pointer'
+          }} onClick={() => setIsPromo10k(!isPromo10k)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '1.4rem' }}>🎉</span>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#fff' }}>
+                  Chế độ Khai Trương Đồng Giá 10K {isPromo10k ? ' (ĐANG BẬT 🔥)' : ''}
+                </div>
+                <div style={{ fontSize: '0.8rem', color: isPromo10k ? '#ffeaa7' : 'var(--text-secondary)' }}>
+                  {isPromo10k ? 'Tất cả các món khi chọn sẽ áp dụng giá ưu đãi 10.000đ / ly' : 'Gạt công tắc để áp dụng giá 10k cho tất cả các món'}
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <label style={{ position: 'relative', display: 'inline-block', width: '50px', height: '26px', cursor: 'pointer' }}>
+                <input type="checkbox" checked={isPromo10k} onChange={e => setIsPromo10k(e.target.checked)} style={{ opacity: 0, width: 0, height: 0 }} />
+                <span style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundColor: isPromo10k ? '#2ecc71' : '#ccc', borderRadius: '34px', transition: '.4s'
+                }}>
+                  <span style={{
+                    position: 'absolute', content: '', height: '18px', width: '18px',
+                    left: isPromo10k ? '26px' : '4px', bottom: '4px', backgroundColor: 'white', borderRadius: '50%', transition: '.4s'
+                  }} />
+                </span>
+              </label>
+            </div>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
             <div>
               {(['sam', 'ep'] as const).map(cat => (
@@ -187,7 +225,13 @@ export default function StaffPage() {
                         <img src={import.meta.env.BASE_URL + item.img} alt={item.name}
                           style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '8px' }} />
                         <div style={{ fontSize: '0.85rem', fontWeight: 600, marginTop: '6px', color: 'var(--text-primary)' }}>{item.name}</div>
-                        <div style={{ color: '#10b981', fontWeight: 'bold' }}>{fmtVND(item.price)}</div>
+                        <div style={{ color: isPromo10k ? '#e74c3c' : '#10b981', fontWeight: 'bold' }}>
+                          {isPromo10k ? (
+                            <span><s style={{ fontSize: '0.75rem', opacity: 0.7, marginRight: '4px', color: '#95a5a6' }}>{fmtVND(item.price)}</s>10.000đ</span>
+                          ) : (
+                            fmtVND(item.price)
+                          )}
+                        </div>
                       </button>
                     ))}
                   </div>
