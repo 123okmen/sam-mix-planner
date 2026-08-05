@@ -161,18 +161,23 @@ function handleOrder(data) {
 
   var shiftTxt = data.shift === 'sang' ? 'Sang (6h-11h)' : 'Chieu toi (16h-21h)';
   var orderId = String(data.orderId || data.id || ('DH' + Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'HHmmss')));
+  var noteTxt = data.note || '';
+  if (data.paymentMethod === 'chuyenkhoan' || data.payment_method === 'chuyenkhoan') {
+    noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'Chuyen khoan';
+  }
   sheet.appendRow([
     orderId,
     Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
     t.gio,
     data.staff || data.name || '',
     shiftTxt,
-    lines.join('\n'),
-    soMon || '',
+    lines.join('
+'),
+    soMon,
     num(data.total),
     num(data.cash),
     num(data.change),
-    data.note || ''
+    noteTxt
   ]);
 
   sendTelegram(tgOrderMsg(data, lines, soMon, shiftTxt, t, orderId));
@@ -191,9 +196,14 @@ function handleOrder(data) {
 }
 // ================= BAO CAO DOANH THU =================
 function handleReport(data) {
-  var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Tien chuyen khoan', 'Ghi chu'];
+  var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu'];
   var sheet = getOrCreateSheet('Bao cao doanh thu', headers);
   var t = nowParts();
+  var noteTxt = data.note || data.ghi_chu || '';
+  if (data.transfer || data.tien_chuyen_khoan) {
+    var ck = num(data.transfer || data.tien_chuyen_khoan);
+    if (ck > 0) noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'Chuyen khoan: ' + moneyFmt(ck);
+  }
   sheet.appendRow([
     Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
     t.gio,
@@ -201,8 +211,7 @@ function handleReport(data) {
     t.ca,
     num(data.revenue || data.doanh_thu),
     num(data.cash || data.tien_mat),
-    num(data.transfer || data.tien_chuyen_khoan),
-    data.note || data.ghi_chu || ''
+    noteTxt
   ]);
 
   sendTelegram(tgReportMsg(data, t));
@@ -317,7 +326,7 @@ function handleReset() {
   // Setup lai header DUNG THEO TRUONG truoc khi xoa du lieu
   getOrCreateSheet('Don hang', ['Ma don', 'Ngay', 'Gio', 'Nhan vien', 'Ca', 'Mon hang (chi tiet)', 'So mon', 'Tong tien', 'Tien khach', 'Tien thoi', 'Ghi chu']);
   getOrCreateSheet('Cham cong', ['Ngay', 'Gio', 'Ten nhan vien', 'Thao tac', 'Ca', 'Ghi chu']);
-  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Tien chuyen khoan', 'Ghi chu']);
+  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu']);
   var names = ['Don hang', 'Cham cong', 'Bao cao doanh thu'];
   var msgs = [];
   for (var i = 0; i < names.length; i++) {
