@@ -565,44 +565,53 @@ export default function RecipePage() {
 
         {/* Recipe Table Section */}
         <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', background: 'rgba(255,255,255,0.9)', color: '#333' }}>
-          <h2 style={{ color: '#d35400', borderBottom: '2px solid #e67e22', paddingBottom: '0.5rem', marginBottom: '1rem', fontSize: '1.3rem' }}>🍹 SOP Pha Chế Nước Ép & Sâm</h2>
+          <h2 style={{ color: '#d35400', borderBottom: '2px solid #e67e22', paddingBottom: '0.5rem', marginBottom: '1rem', fontSize: '1.3rem' }}>🍹 SOP Pha Chế Nước Ép & Nước Sâm</h2>
+          
+          <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#eef9f5', borderRadius: '8px', borderLeft: '4px solid #10b981' }}>
+            <h3 style={{ margin: '0 0 6px 0', color: '#047857', fontSize: '1.05rem' }}>🍵 1. Nước Sâm Mix (Nấu Sẵn & Rót Bình/Ly)</h3>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: '#374151' }}>
+              Nước Sâm (Mía Lau, Củ Năng Táo Đỏ, Bông Cúc Nhãn Nhục) đã được <strong>nấu sẵn</strong>, ủ lạnh trong tủ mát. Nhân viên ca trực chỉ cần rót vào ly, thêm topping (nhãn nhục, táo đỏ, hạt chia) và đá theo định lượng.
+            </p>
+          </div>
+
+          <h3 style={{ color: '#166534', margin: '0 0 10px 0', fontSize: '1.05rem' }}>🍉 2. Nước Ép Trái Cây Tươi (Ép Tại Chỗ Khi Có Đơn)</h3>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', background: 'rgba(255,255,255,0.8)', color: '#333' }}>
             <thead>
               <tr style={{ background: '#1e7145', color: 'white' }}>
                 <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên Món</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Công thức ép chuẩn (Ly 500ml)</th>
+                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Công thức ép tại chỗ (Ly 500ml)</th>
                 <th style={{ padding: '10px', border: '1px solid #ddd' }}>Lưu ý kích vị</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Dưa Hấu</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dưa hấu (khoảng 1/4 quả) + 20ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dưa hấu ép tươi + 20ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Ép nguyên ruột, lọc bớt hạt cho ly trong</td>
               </tr>
               <tr style={{ background: '#f9f9f9' }}>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cam Sành</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cam (2–3 quả) + 30ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cam vắt tươi + 30ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 1 xíu muối tinh để vị đậm đà</td>
               </tr>
               <tr style={{ background: '#f9f9f9' }}>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cà Rốt</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cà rốt (2–3 củ) + 20ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cà rốt ép tươi + 20ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 10ml nước cốt chanh để không bị ngái</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Dứa Mật</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dứa (1/2 quả lớn) + 20ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt dứa ép tươi + 20ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 5ml cốt tắc để tăng độ thơm</td>
               </tr>
               <tr style={{ background: '#f9f9f9' }}>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cóc Non</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cóc (3–4 quả) + 35ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cóc ép tươi + 35ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Bắt buộc có muối tinh liều lượng nhỏ</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cần Tây Mix Táo</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cần tây + 50ml cốt táo + 10ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cần tây + 50ml cốt táo ép tươi + 10ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Ép cùng 1 lát gừng mỏng để khử mùi hăng</td>
               </tr>
             </tbody>
