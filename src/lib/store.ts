@@ -111,3 +111,20 @@ export function deleteOrder(orderId: string) {
   const orders = getOrders().filter(o => o.id !== orderId);
   localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 }
+
+export async function syncDeleteOrder(orderId: string): Promise<boolean> {
+  try {
+    await fetch(APP_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        type: 'delete_order',
+        orderId: orderId
+      })
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}

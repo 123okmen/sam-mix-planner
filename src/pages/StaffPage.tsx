@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import LoginGate from '../components/LoginGate';
-import { MENU, saveOrder, deleteOrder, syncOrder, getShift, fmtVND } from '../lib/store';
+import { MENU, saveOrder, deleteOrder, syncOrder, syncDeleteOrder, getShift, fmtVND } from '../lib/store';
 import type { Order, OrderLine } from '../lib/store';
 
 const API = 'https://script.google.com/macros/s/AKfycbyETg2znWnDrNsgq3G2eB0IJxFeb_GdLKo5N68FkFlJVMvTzdt_M_C3YFzL7fcgiyY1/exec';
@@ -96,8 +96,8 @@ export default function StaffPage() {
     setTimeout(() => setToast(''), 4000);
   };
 
-  const handleDeleteOrder = (orderId: string) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa đơn ' + orderId + ' không?')) {
+  const handleDeleteOrder = async (orderId: string) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa đơn ' + orderId + ' trên giao diện và Google Sheets không?')) {
       deleteOrder(orderId);
       setRecentOrders(prev => prev.filter(o => o.id !== orderId));
       if (editingOrderId === orderId) {
@@ -105,8 +105,10 @@ export default function StaffPage() {
         setCart([]);
         setCash('');
       }
-      setToast('ĐÃ XÓA ĐƠN ' + orderId + '!');
-      setTimeout(() => setToast(''), 3000);
+      setToast('ĐANG XÓA ĐƠN TRÊN GOOGLE SHEETS...');
+      const ok = await syncDeleteOrder(orderId);
+      setToast(ok ? 'ĐÃ XÓA ĐƠN ' + orderId + ' THÀNH CÔNG!' : 'ĐÃ XÓA CỤC BỘ (LỖI MẠNG ĐỒNG BỘ)');
+      setTimeout(() => setToast(''), 3500);
     }
   };
 

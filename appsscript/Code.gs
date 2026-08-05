@@ -12,6 +12,7 @@ function doPost(e) {
     if (type === 'checkin' || type === 'checkout') return handleShift(data, type);
     if (type === 'report') return handleReport(data);
     if (type === 'order') return handleOrder(data);
+    if (type === 'delete_order') return handleDeleteOrderSheet(data);
     if (type === 'summary') return handleSummary(data);
     return jsonOk('Khong ho tro type: ' + type);
   } catch (err) {
@@ -552,4 +553,32 @@ function doGet(e) {
   L.push('</body></html>');
 
   return HtmlService.createHtmlOutput(L.join(String.fromCodePoint(0x0A))).setTitle('SAM MIX - Dashboard Co Dong');
+}
+function handleDeleteOrderSheet(data) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Don hang');
+  var orderId = String(data.orderId || '').trim();
+  if (!sheet || !orderId) return jsonErr('Khong tim thay sheet hoac Ma don');
+
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return jsonOk('Sheet trong');
+
+  var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  var deletedCount = 0;
+
+  // Xoa cac dong trung Ma don (duyet nguoc tu duoi len de khong lech index)
+  for (var i = ids.length - 1; i >= 0; i--) {
+    var idCell = String(ids[i][0] || '').trim();
+    if (idCell === orderId) {
+      sheet.deleteRow(i + 2);
+      deletedCount++;
+    }
+  }
+
+  if (deletedCount > 0) {
+    sendTelegram(String.fromCodePoint(0x1F5D1) + ' DA XOA DON HANG #' + orderId + ' tren Google Sheets');
+    return jsonOk('Da xoa don ' + orderId + ' (' + deletedCount + ' dong)');
+  }
+
+  return jsonOk('Khong tim thay don ' + orderId + ' tren Google Sheets');
 }
