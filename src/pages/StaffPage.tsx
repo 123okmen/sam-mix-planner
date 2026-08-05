@@ -27,6 +27,12 @@ export default function StaffPage() {
 
 
   useEffect(() => {
+    // Load local orders for shift calculation
+    try {
+      const stored = localStorage.getItem('sammix_orders_v1');
+      if (stored) setRecentOrders(JSON.parse(stored));
+    } catch {}
+
     let alive = true;
     const load = async () => {
       try {
@@ -124,6 +130,46 @@ export default function StaffPage() {
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(ok ? `Đã check-out lúc: ${time}` : 'Chưa check-out (lỗi mạng)');
     alert(ok ? `Cảm ơn ${staff}! Đã lưu dữ liệu kết thúc ca làm việc.` : 'Lỗi mạng khi Check-out!');
+  };
+
+  // Tính toán doanh thu & tiền mặt & chuyển khoản TRONG CA CỦA NHÂN VIÊN
+  const shiftMetrics = useMemo(() => {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const shiftOrders = recentOrders.filter(o => {
+      const isToday = o.time && o.time.slice(0, 10) === todayStr;
+      const matchStaff = !staff.trim() || o.staff.toLowerCase() === staff.trim().toLowerCase();
+      const matchShift = o.shift === shift;
+      return isToday && matchShift && matchStaff;
+    });
+
+    let rev = 0;
+    let tm = 0;
+    let ck = 0;
+
+    shiftOrders.forEach(o => {
+      rev += (o.total || 0);
+      if (o.paymentMethod === 'chuyenkhoan') {
+        ck += (o.total || 0);
+      } else {
+        tm += (o.total || 0);
+      }
+    });
+
+    return {
+      ordersCount: shiftOrders.length,
+      doanhThuCa: rev,
+      tienMatCa: tm,
+      tienChuyenKhoanCa: ck
+    };
+  }, [recentOrders, staff, shift]);
+
+  const handleAutoFillReport = () => {
+    setReportData({
+      doanhThu: shiftMetrics.doanhThuCa.toString(),
+      tienMat: shiftMetrics.tienMatCa.toString(),
+      tienChuyenKhoan: shiftMetrics.tienChuyenKhoanCa.toString(),
+      ghiChu: reportData.ghiChu
+    });
   };
 
   const handleSendSummary = async () => {
@@ -377,15 +423,27 @@ export default function StaffPage() {
               </button>
             </div>
 
-            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '12px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '6px' }}>💡 Dữ liệu hệ thống ghi nhận hôm nay:</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '0.95rem' }}>
-                <span>Tổng đơn: <span style={{ color: '#3498db' }}>{apiOrders} đơn</span></span>
-                <span>Doanh thu hệ thống: <span style={{ color: '#2ecc71' }}>{fmtVND(apiRevenue)}</span></span>
+            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '14px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#f1c40f', marginBottom: '8px' }}>
+                📊 Thống kê TRONG CA HIỆN TẠI (Ca {shift === 'sang' ? 'Sáng' : 'Chiều'}):
               </div>
-              <button type="button" onClick={() => setReportData({ ...reportData, doanhThu: apiRevenue.toString() })}
-                style={{ marginTop: '8px', background: 'transparent', border: '1px dashed #2ecc71', color: '#2ecc71', padding: '4px 10px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', width: '100%' }}>
-                ⚡ Tự điền Doanh Thu Hệ Thống ({fmtVND(apiRevenue)}) vào báo cáo
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px', textAlign: 'center' }}>
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Doanh Thu Ca</div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#2ecc71' }}>{fmtVND(shiftMetrics.doanhThuCa)}</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Tiền Mặt Ca</div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#f39c12' }}>{fmtVND(shiftMetrics.tienMatCa)}</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Chuyển Khoản Ca</div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#3498db' }}>{fmtVND(shiftMetrics.tienChuyenKhoanCa)}</div>
+                </div>
+              </div>
+              <button type="button" onClick={handleAutoFillReport}
+                style={{ background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', width: '100%' }}>
+                ⚡ TỰ ĐIỀN CHÍNH XÁC DOANH THU & TIỀN MẶT & CHUYỂN KHOẢN CA NÀY
               </button>
             </div>
             <form onSubmit={handleSubmitReport} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
