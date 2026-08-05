@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginGate from '../components/LoginGate';
 import { MENU, saveOrder, syncOrder, getShift, fmtVND } from '../lib/store';
 import type { Order, OrderLine } from '../lib/store';
@@ -6,6 +7,7 @@ import type { Order, OrderLine } from '../lib/store';
 const API = 'https://script.google.com/macros/s/AKfycbyETg2znWnDrNsgq3G2eB0IJxFeb_GdLKo5N68FkFlJVMvTzdt_M_C3YFzL7fcgiyY1/exec';
 
 export default function StaffPage() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState<'pos' | 'shift' | 'report' | 'recipes'>('pos');
   const [staff, setStaff] = useState('');
   const [shift] = useState<'sang' | 'chieu'>(getShift());
@@ -147,6 +149,10 @@ export default function StaffPage() {
               {label}
             </button>
           ))}
+          <button onClick={() => navigate('/recipe')} className="btn-primary"
+            style={{ padding: '0.6rem 1.4rem', background: '#d35400' }}>
+            🎉 Khai Trương 10K
+          </button>
         </div>
 
         <div className="glass-panel" style={{ marginBottom: '1.5rem', padding: '1rem 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
