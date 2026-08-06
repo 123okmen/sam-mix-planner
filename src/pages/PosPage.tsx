@@ -96,10 +96,10 @@ export default function PosPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
           <div>
-            {(['sam', 'ep'] as const).map(cat => (
+            {(['sam', 'ep', 'food'] as const).map(cat => (
               <div key={cat} className="glass-panel" style={{ marginBottom: '1.5rem', padding: '1.2rem' }}>
                 <h2 style={{ marginTop: 0, color: cat === 'sam' ? '#d35400' : '#3498db', fontSize: '1.1rem' }}>
-                  {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : '🥤 Nước Ép Trái Cây Tươi'}
+                  {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : cat === 'ep' ? '🥤 Nước Ép Trái Cây Tươi' : '🍢 Đồ Ăn Vặt & Nem Nướng'}
                 </h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
                   {MENU.filter(m => m.category === cat).map(item => (

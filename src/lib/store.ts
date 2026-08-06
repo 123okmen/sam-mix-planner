@@ -6,7 +6,7 @@ export interface MenuItem {
   id: string;
   name: string;
   price: number;
-  category: 'sam' | 'ep';
+  category: 'sam' | 'ep' | 'food';
   img: string;
 }
 
@@ -20,6 +20,7 @@ export const MENU: MenuItem[] = [
   { id: 'ep-dua',          name: 'Dứa Mật',              price: 20000, category: 'ep',  img: 'dua.jpeg' },
   { id: 'ep-coc',          name: 'Cóc Non',               price: 20000, category: 'ep',  img: 'coc.jpeg' },
   { id: 'ep-can-tay',      name: 'Cần Tây Mix Táo',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
+  { id: 'nem-nuong',       name: 'Nem Nướng',             price: 15000, category: 'food', img: 'logo_v2.jpg' },
 ];
 
 export interface OrderLine {
