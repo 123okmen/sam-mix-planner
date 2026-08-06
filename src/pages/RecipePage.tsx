@@ -28,6 +28,7 @@ const MENU_ITEMS = [
   { id: 'ep_dua', name: 'Dứa Mật', originalPrice: 20000 },
   { id: 'ep_coc', name: 'Cóc Non', originalPrice: 20000 },
   { id: 'ep_cantay', name: 'Cần Tây Mix Táo', originalPrice: 30000 },
+  { id: 'nem_nuong', name: 'Nem Nướng', originalPrice: 15000 },
 ];
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-75MfvgUDcWexbQ6hJbyT42P3gVm5R6l585fnRMBC8sd_pMZyh9mJbMAa98HpsfAk/exec";

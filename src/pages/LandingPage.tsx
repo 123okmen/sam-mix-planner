@@ -67,6 +67,38 @@ export default function LandingPage() {
 
               </div>
 
+              {/* Đồ Ăn Vặt Column */}
+              <div className="column">
+                  <div className="col-title">
+                      🍢 ĐỒ ĂN VẶT
+                  </div>
+                  
+                  <div className="menu-item">
+                      <img className="item-thumb" src={import.meta.env.BASE_URL + "nem_nuong.jpg"} alt="Nem Nướng" />
+                      <div className="item-info">
+                          <h3 className="item-name">1. Nem Nướng Nóng Hổi</h3>
+                              <div className="item-note">Thơm lừng · đậm đà chuẩn vị</div>
+                      </div>
+                      <div className="item-price">15K</div>
+                  </div>
+              </div>
+
+              {/* Đồ Ăn Vặt Column */}
+              <div className="column">
+                  <div className="col-title">
+                      🍢 ĐỒ ĂN VẶT
+                  </div>
+                  
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}nem_nuong.jpg`} alt="Nem Nướng" />
+                      <div className="item-info">
+                          <h3 className="item-name">1. Nem Nướng Nóng Hổi</h3>
+                              <div className="item-note">Thơm lừng · đậm đà chuẩn vị</div>
+                      </div>
+                      <div className="item-price">15K</div>
+                  </div>
+              </div>
+
               {/* Nước Ép Column */}
               <div className="column">
                   <div className="col-title">
