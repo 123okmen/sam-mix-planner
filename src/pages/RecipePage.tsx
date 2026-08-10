@@ -20,9 +20,9 @@ interface Order {
 }
 
 const MENU_ITEMS = [
-  { id: 'sam_cuc', name: 'Sâm Bông Cúc Nhãn Nhục', originalPrice: 20000 },
-  { id: 'sam_nang', name: 'Sâm Củ Năng Táo Đỏ', originalPrice: 20000 },
-  { id: 'sam_mia', name: 'Sâm Mía Lau', originalPrice: 20000 },
+  { id: 'sam_cuc', name: 'Sâm Bông Cúc Nhãn Nhục', originalPrice: 15000 },
+  { id: 'sam_nang', name: 'Sâm Củ Năng Táo Đỏ', originalPrice: 15000 },
+  { id: 'sam_mia', name: 'Sâm Mía Lau', originalPrice: 15000 },
   { id: 'ep_cam', name: 'Cam Sành Miền Tây', originalPrice: 25000 },
   { id: 'ep_carot', name: 'Cà Rốt Đà Lạt', originalPrice: 20000 },
   { id: 'ep_dua', name: 'Dứa Mật', originalPrice: 20000 },

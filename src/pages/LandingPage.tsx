@@ -43,7 +43,7 @@ export default function LandingPage() {
                           <h3 className="item-name">1. Sâm Bông Cúc Nhãn Nhục</h3>
                               <div className="item-note">Thanh nhiệt, mát gan · ngủ ngon</div>
                       </div>
-                      <div className="item-price">20K</div>
+                      <div className="item-price">15K</div>
                   </div>
 
                   <div className="menu-item">
@@ -52,7 +52,7 @@ export default function LandingPage() {
                           <h3 className="item-name">2. Sâm Củ Năng Táo Đỏ</h3>
                               <div className="item-note">Bồi bổ khí huyết · giảm mệt mỏi</div>
                       </div>
-                      <div className="item-price">20K</div>
+                      <div className="item-price">15K</div>
                   </div>
 
                   <div className="menu-item">
@@ -61,7 +61,7 @@ export default function LandingPage() {
                           <h3 className="item-name">3. Sâm Mía Lau</h3>
                               <div className="item-note">Thanh nhiệt · bổ sung năng lượng</div>
                       </div>
-                      <div className="item-price">20K</div>
+                      <div className="item-price">15K</div>
                   </div>
 
 
