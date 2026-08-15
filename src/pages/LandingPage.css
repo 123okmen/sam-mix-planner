@@ -76,7 +76,7 @@
 /* Responsive Grid Layout: 3 Columns Desktop, 1 Column Mobile */
 .columns {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 25px;
     align-items: start;
 }

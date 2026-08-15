@@ -67,6 +67,32 @@ export default function LandingPage() {
 
               </div>
 
+              
+              {/* Cà Phê Phin Column */}
+              <div className="column">
+                  <div className="col-title">
+                      ☕ CÀ PHÊ PHIN
+                  </div>
+                  
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}logo_v2.jpg`} alt="Cà Phê Đen" />
+                      <div className="item-info">
+                          <h3 className="item-name">1. Cà Phê Đen</h3>
+                              <div className="item-note">Đậm đà · chuẩn vị phin truyền thống</div>
+                      </div>
+                      <div className="item-price">15K</div>
+                  </div>
+
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}logo_v2.jpg`} alt="Cà Phê Sữa" />
+                      <div className="item-info">
+                          <h3 className="item-name">2. Cà Phê Sữa</h3>
+                              <div className="item-note">Thơm béo · đậm đà hài hòa</div>
+                      </div>
+                      <div className="item-price">20K</div>
+                  </div>
+              </div>
+
               {/* Đồ Ăn Vặt Column */}
               <div className="column">
                   <div className="col-title">
