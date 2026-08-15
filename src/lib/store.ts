@@ -6,13 +6,15 @@ export interface MenuItem {
   id: string;
   name: string;
   price: number;
-  category: 'sam' | 'ep' | 'food';
+  category: 'sam' | 'coffee' | 'ep' | 'food';
   img: string;
 }
 
 export const MENU: MenuItem[] = [
   { id: 'sam-mia-lau',     name: 'Sâm Mía Lau',          price: 15000, category: 'sam', img: 'sam_mia_lau_v2.jpg' },
   { id: 'sam-bong-cuc',    name: 'Sâm Bông Cúc',         price: 15000, category: 'sam', img: 'sam_bong_cuc_v2.jpg' },
+    { id: 'ca-phe-den',     name: 'Cà Phê Đen',           price: 15000, category: 'coffee', img: 'logo_v2.jpg' },
+  { id: 'ca-phe-sua',     name: 'Cà Phê Sữa',           price: 20000, category: 'coffee', img: 'logo_v2.jpg' },
   { id: 'sam-tao-do',      name: 'Sâm Táo Đỏ Long Nhãn', price: 15000, category: 'sam', img: 'sam_cu_nang_v2.jpg' },
   { id: 'ep-dua-hau',     name: 'Nước Ép Dưa Hấu',       price: 15000, category: 'ep',  img: 'dua_hau.jpg' },
   { id: 'ep-cam',          name: 'Cam Sành Miền Tây',    price: 15000, category: 'ep',  img: 'cam.jpg' },
