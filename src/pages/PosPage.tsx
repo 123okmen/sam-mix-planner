@@ -5,7 +5,7 @@ import type { Order, OrderLine } from '../lib/store';
 
 export default function PosPage() {
   const [staff, setStaff] = useState('');
-  const [shift, setShift] = useState<'sang' | 'chieu'>(getShift());
+  const [shift, setShift] = useState<'sang' | 'gay' | 'chieu'>(getShift());
   const [cart, setCart] = useState<OrderLine[]>([]);
   const [cash, setCash] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);

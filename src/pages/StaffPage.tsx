@@ -10,7 +10,7 @@ export default function StaffPage() {
   
   const [tab, setTab] = useState<'pos' | 'shift' | 'report' | 'recipes'>('pos');
   const [staff, setStaff] = useState('');
-  const [shift] = useState<'sang' | 'chieu'>(getShift());
+  const [shift, setShift] = useState<'sang' | 'gay' | 'chieu'>(getShift());
   const [cart, setCart] = useState<OrderLine[]>([]);
   const [cash, setCash] = useState('');
   const [toast, setToast] = useState('');
@@ -137,19 +137,21 @@ export default function StaffPage() {
   const handleCheckIn = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-in...');
-    const ok = await postJson({ type: 'checkin', staff: staff.trim() });
+    const shiftText = shift === 'sang' ? 'Ca Sáng (6h-11h)' : shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const ok = await postJson({ type: 'checkin', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
-    setShiftStatus(ok ? `Đã check-in lúc: ${time}` : 'Chưa check-in (lỗi mạng)');
-    alert(ok ? `Xin chào ${staff}! Đã lưu hệ thống. Chúc bạn một ca làm việc năng suất!` : 'Lỗi mạng khi Check-in!');
+    setShiftStatus(ok ? `Đã check-in ${shiftText} lúc: ${time}` : 'Chưa check-in (lỗi mạng)');
+    alert(ok ? `Xin chào ${staff}! Đã check-in ${shiftText} thành công.` : 'Lỗi mạng khi Check-in!');
   };
 
   const handleCheckOut = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-out...');
-    const ok = await postJson({ type: 'checkout', staff: staff.trim() });
+    const shiftText = shift === 'sang' ? 'Ca Sáng (6h-11h)' : shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const ok = await postJson({ type: 'checkout', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
-    setShiftStatus(ok ? `Đã check-out lúc: ${time}` : 'Chưa check-out (lỗi mạng)');
-    alert(ok ? `Cảm ơn ${staff}! Đã lưu dữ liệu kết thúc ca làm việc.` : 'Lỗi mạng khi Check-out!');
+    setShiftStatus(ok ? `Đã check-out ${shiftText} lúc: ${time}` : 'Chưa check-out (lỗi mạng)');
+    alert(ok ? `Cảm ơn ${staff}! Đã check-out ${shiftText} thành công.` : 'Lỗi mạng khi Check-out!');
   };
 
   // Tính toán doanh thu & tiền mặt & chuyển khoản TRONG CA CỦA NHÂN VIÊN
@@ -234,10 +236,19 @@ export default function StaffPage() {
         </div>
 
         <div className="glass-panel" style={{ marginBottom: '1.5rem', padding: '1rem 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: '220px' }}>
+          <div style={{ flex: 1, minWidth: '200px' }}>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Tên nhân viên *</div>
             <input className="input-field" style={{ padding: '0.5rem 1rem' }} placeholder="VD: Minh, Lan..."
               value={staff} onChange={e => setStaff(e.target.value)} />
+          </div>
+          <div style={{ minWidth: '200px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Ca làm việc *</div>
+            <select className="input-field" style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', color: '#fff' }}
+              value={shift} onChange={e => setShift(e.target.value as 'sang' | 'gay' | 'chieu')}>
+              <option value="sang" style={{ background: '#222' }}>🌅 Ca Sáng (6h - 11h)</option>
+              <option value="gay" style={{ background: '#222' }}>⚡ Ca Gãy (13h - 16h)</option>
+              <option value="chieu" style={{ background: '#222' }}>🌙 Ca Chiều Tối (16h - 21h)</option>
+            </select>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Doanh thu hôm nay</div>
@@ -451,7 +462,7 @@ export default function StaffPage() {
 
             <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '14px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
               <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#f1c40f', marginBottom: '8px' }}>
-                📊 Thống kê TRONG CA HIỆN TẠI (Ca {shift === 'sang' ? 'Sáng' : 'Chiều'}):
+                📊 Thống kê TRONG CA HIỆN TẠI (Ca {shift === 'sang' ? 'Sáng (6h-11h)' : shift === 'gay' ? 'Gãy (13h-16h)' : 'Chiều tối (16h-21h)'}):
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px', textAlign: 'center' }}>
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px' }}>

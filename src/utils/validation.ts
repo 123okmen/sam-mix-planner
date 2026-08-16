@@ -8,9 +8,9 @@ export interface ShiftTime {
 }
 
 export const SHIFTS = {
-  morning: { start: '06:00', end: '14:00', name: 'Ca Sáng' },
-  afternoon: { start: '14:00', end: '22:00', name: 'Ca Chiều' },
-  night: { start: '22:00', end: '06:00', name: 'Ca Tối' }
+  morning: { start: '06:00', end: '11:00', name: 'Ca Sáng (6h-11h)' },
+  split: { start: '13:00', end: '16:00', name: 'Ca Gãy (13h-16h)' },
+  evening: { start: '16:00', end: '21:00', name: 'Ca Chiều Tối (16h-21h)' }
 };
 
 /**
@@ -22,22 +22,22 @@ export const validateShiftTime = (): { isValid: boolean; currentShift: string | 
   const minute = now.getMinutes();
   const currentTime = hour * 60 + minute;
 
-  // Morning shift: 6:00 - 14:00
-  if (currentTime >= 6 * 60 && currentTime < 14 * 60) {
-    return { isValid: true, currentShift: 'Ca Sáng (6:00 - 14:00)' };
+  // Ca sáng: 6:00 - 11:00
+  if (currentTime >= 6 * 60 && currentTime < 11 * 60) {
+    return { isValid: true, currentShift: 'Ca Sáng (6:00 - 11:00)' };
   }
   
-  // Afternoon shift: 14:00 - 22:00
-  if (currentTime >= 14 * 60 && currentTime < 22 * 60) {
-    return { isValid: true, currentShift: 'Ca Chiều (14:00 - 22:00)' };
+  // Ca gãy: 13:00 - 16:00
+  if (currentTime >= 13 * 60 && currentTime < 16 * 60) {
+    return { isValid: true, currentShift: 'Ca Gãy (13:00 - 16:00)' };
   }
   
-  // Night shift: 22:00 - 6:00
-  if (currentTime >= 22 * 60 || currentTime < 6 * 60) {
-    return { isValid: true, currentShift: 'Ca Tối (22:00 - 6:00)' };
+  // Ca chiều tối: 16:00 - 21:00
+  if (currentTime >= 16 * 60 && currentTime <= 21 * 60 + 30) {
+    return { isValid: true, currentShift: 'Ca Chiều Tối (16:00 - 21:00)' };
   }
 
-  return { isValid: false, currentShift: null };
+  return { isValid: true, currentShift: 'Ngoài giờ chính thức' };
 };
 
 /**
