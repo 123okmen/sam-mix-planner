@@ -163,8 +163,8 @@ export default function LandingPage() {
                   <div className="menu-item">
                       <img className="item-thumb" src={`${import.meta.env.BASE_URL}cantay.JPG`} alt="Cần Tây" />
                       <div className="item-info">
-                          <h3 className="item-name">6. Cần Tây Mix Táo</h3>
-                              <div className="item-note">Kali, chất xơ · ổn định huyết áp</div>
+                          <h3 className="item-name">6. Ép Trái Cây Mix</h3>
+                              <div className="item-note">Kết hợp trái cây tươi · thơm ngon, bổ dưỡng</div>
                       </div>
                       <div className="item-price">25K</div>
                   </div>

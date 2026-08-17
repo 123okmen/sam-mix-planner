@@ -538,8 +538,8 @@ export default function StaffPage() {
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Bắt buộc có muối tinh liều lượng nhỏ</td>
                 </tr>
                 <tr style={{ background: '#f9f9f9' }}>
-                  <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>6. Cần Tây Mix Táo</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>150ml cốt cần tây + 50ml cốt táo + 10ml nước đường mật mía + đá</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>6. Ép Trái Cây Mix</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml hỗn hợp nước ép trái cây mix tươi + 15ml nước đường mật mía + đá</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>Ép cùng 1 lát gừng mỏng để khử mùi hăng</td>
                 </tr>
               </tbody>

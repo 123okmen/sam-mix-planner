@@ -21,7 +21,7 @@ export const MENU: MenuItem[] = [
   { id: 'ep-ca-rot',       name: 'Cà Rốt Đà Lạt',        price: 20000, category: 'ep',  img: 'carot.jpg' },
   { id: 'ep-dua',          name: 'Dứa Mật',              price: 20000, category: 'ep',  img: 'dua.jpeg' },
   { id: 'ep-coc',          name: 'Cóc Non',               price: 20000, category: 'ep',  img: 'coc.jpeg' },
-  { id: 'ep-can-tay',      name: 'Cần Tây Mix Táo',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
+  { id: 'ep-trai-cay-mix',  name: 'Ép Trái Cây Mix',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
   { id: 'nem-nuong',       name: 'Nem Nướng',             price: 15000, category: 'food', img: 'nem_nuong.jpg' },
 ];
 
