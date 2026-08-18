@@ -8,7 +8,8 @@ const API = 'https://script.google.com/macros/s/AKfycbyETg2znWnDrNsgq3G2eB0IJxFe
 
 export default function StaffPage() {
   
-  const [tab, setTab] = useState<'pos' | 'shift' | 'report' | 'recipes'>('pos');
+  const [tab, setTab] = useState<'pos' | 'shift' | 'off' | 'report' | 'recipes'>('pos');
+  const [offData, setOffData] = useState({ date: new Date().toISOString().slice(0,10), shift: 'sang', reason: '' });
   const [staff, setStaff] = useState('');
   const [shift, setShift] = useState<'sang' | 'gay' | 'chieu'>(getShift());
   const [cart, setCart] = useState<OrderLine[]>([]);
@@ -214,6 +215,27 @@ export default function StaffPage() {
     setIsSubmitting(false);
   };
 
+  
+  const handleOffSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
+    if (!offData.reason.trim()) return alert('Vui lòng nhập lý do xin nghỉ!');
+    setIsSubmitting(true);
+
+    const shiftText = offData.shift === 'sang' ? 'Ca Sáng (6h-11h)' : offData.shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const ok = await postJson({
+      type: 'off_request',
+      staff: staff.trim(),
+      date: offData.date,
+      shift: shiftText,
+      reason: offData.reason.trim()
+    });
+
+    alert(ok ? '🚀 Đã gửi đơn báo nghỉ ca thành công!' : 'Đã lưu báo cáo nghỉ ca!');
+    if (ok) setOffData({ date: new Date().toISOString().slice(0,10), shift: 'sang', reason: '' });
+    setIsSubmitting(false);
+  };
+
   const handleSubmitReport = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
@@ -239,7 +261,7 @@ export default function StaffPage() {
         </p>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          {([['pos', '🧾 Nhập Món'], ['shift', '⏱️ Chấm Công'], ['report', '📋 Báo Cáo Cuối Ca'], ['recipes', '📖 Công Thức Pha Chế']] as const).map(([k, label]) => (
+          {([['pos', '🧾 Nhập Món'], ['shift', '⏱️ Chấm Công'], ['off', '🏖️ Báo Cáo Off Ca'], ['report', '📋 Báo Cáo Cuối Ca'], ['recipes', '📖 Công Thức Pha Chế']] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)} className="btn-primary"
               style={{ padding: '0.6rem 1.4rem', background: tab === k ? '#1e7145' : 'rgba(255,255,255,0.1)' }}>
               {label}
@@ -446,6 +468,42 @@ export default function StaffPage() {
             )}
           </div>
         </>)}
+
+        
+        {tab === 'off' && (
+          <div className="glass-panel" style={{ maxWidth: "600px", margin: "0 auto" }}>
+            <h2 style={{ color: "#e74c3c", marginTop: 0 }}>🏖️ Báo Cáo Nghỉ Ca (Off Ca)</h2>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: "1.2rem" }}>
+              Vui lòng điền thông tin bên dưới để gửi thông báo xin nghỉ ca trực tiếp cho Quản lý & Nhóm Zalo Nhân Viên.
+            </p>
+            <form onSubmit={handleOffSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div>
+                <label style={{ fontSize: "0.85rem", display: "block", marginBottom: "6px" }}>Ngày xin nghỉ *</label>
+                <input type="date" className="input-field" style={{ width: "100%", padding: "0.6rem 1rem", background: "rgba(255,255,255,0.1)", color: "#fff" }}
+                  value={offData.date} onChange={e => setOffData({ ...offData, date: e.target.value })} required />
+              </div>
+              <div>
+                <label style={{ fontSize: "0.85rem", display: "block", marginBottom: "6px" }}>Ca xin nghỉ *</label>
+                <select className="input-field" style={{ width: "100%", padding: "0.6rem 1rem", background: "rgba(255,255,255,0.1)", color: "#fff" }}
+                  value={offData.shift} onChange={e => setOffData({ ...offData, shift: e.target.value })}>
+                  <option value="sang" style={{ background: "#222" }}>🌅 Ca Sáng (6h - 11h)</option>
+                  <option value="gay" style={{ background: "#222" }}>⚡ Ca Gãy (13h - 16h)</option>
+                  <option value="chieu" style={{ background: "#222" }}>🌙 Ca Chiều Tối (16h - 21h)</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ fontSize: "0.85rem", display: "block", marginBottom: "6px" }}>Lý do xin nghỉ ca *</label>
+                <textarea className="input-field" style={{ width: "100%", padding: "0.8rem 1rem", minHeight: "90px" }}
+                  placeholder="VD: Bận lịch học đột xuất / Có việc gia đình / Ốm..."
+                  value={offData.reason} onChange={e => setOffData({ ...offData, reason: e.target.value })} required />
+              </div>
+              <button type="submit" disabled={isSubmitting} className="btn-primary"
+                style={{ background: "linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)", padding: "0.8rem", fontSize: "1rem", fontWeight: "bold" }}>
+                🚀 Gửi Báo Cáo Xin Nghỉ (Off Ca)
+              </button>
+            </form>
+          </div>
+        )}
 
         {tab === 'shift' && (
           <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto' }}>
