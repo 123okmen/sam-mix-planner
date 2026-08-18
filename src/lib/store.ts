@@ -6,7 +6,7 @@ export interface MenuItem {
   id: string;
   name: string;
   price: number;
-  category: 'sam' | 'coffee' | 'ep' | 'food';
+  category: 'sam' | 'coffee' | 'ep' | 'food' | 'app';
   img: string;
 }
 
@@ -23,6 +23,7 @@ export const MENU: MenuItem[] = [
   { id: 'ep-coc',          name: 'Cóc Non',               price: 20000, category: 'ep',  img: 'coc.jpeg' },
   { id: 'ep-trai-cay-mix',  name: 'Ép Trái Cây Mix',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
   { id: 'nem-nuong',       name: 'Nem Nướng',             price: 15000, category: 'food', img: 'nem_nuong.jpg' },
+  { id: 'app-online',      name: 'Đơn App Online (ShopeeFood / Grab)', price: 0, category: 'app', img: 'logo_v2.jpg' },
 ];
 
 export interface OrderLine {
@@ -33,7 +34,7 @@ export interface OrderLine {
 }
 
 export interface Order {
-  paymentMethod?: 'tienmat' | 'chuyenkhoan';
+  paymentMethod?: 'tienmat' | 'chuyenkhoan' | 'app';
   id: string;
   time: string;
   staff: string;

@@ -18,7 +18,8 @@ export default function StaffPage() {
   const [reportData, setReportData] = useState({ doanhThu: '', tienMat: '', tienChuyenKhoan: '', ghiChu: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
-  const [paymentMethod, setPaymentMethod] = useState<"tienmat" | "chuyenkhoan">("tienmat");
+  const [paymentMethod, setPaymentMethod] = useState<"tienmat" | "chuyenkhoan" | "app">("tienmat");
+
   const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
   const [isPromo10k, setIsPromo10k] = useState<boolean>(false);
 
@@ -50,6 +51,18 @@ export default function StaffPage() {
   }, []);
 
   const addItem = (id: string, name: string, price: number) => {
+    if (id === 'app-online') {
+      const valStr = prompt('Nhập số tiền THỰC TẾ THU VỀ của đơn App Online (VNĐ):', '35000');
+      if (!valStr) return;
+      const num = parseInt(valStr.replace(/\D/g, ''), 10);
+      if (isNaN(num) || num <= 0) { alert('Số tiền không hợp lệ!'); return; }
+      const itemKey = 'app_' + Date.now();
+      const appName = 'Đơn App (' + fmtVND(num) + ')';
+      setCart(prev => [...prev, { id: itemKey, name: appName, price: num, qty: 1 }]);
+      setPaymentMethod('app');
+      return;
+    }
+
     const finalPrice = isPromo10k ? 10000 : price;
     const itemKey = isPromo10k ? id + '_10k' : id;
     const itemName = isPromo10k ? name + ' (Khai Trương 10K)' : name;
@@ -294,10 +307,10 @@ export default function StaffPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
             <div>
-              {(['sam', 'coffee', 'ep', 'food'] as const).map(cat => (
+              {(['sam', 'coffee', 'ep', 'food', 'app'] as const).map(cat => (
                 <div key={cat} className="glass-panel" style={{ marginBottom: '1.5rem', padding: '1.2rem' }}>
                   <h2 style={{ marginTop: 0, color: cat === 'sam' ? '#d35400' : cat === 'coffee' ? '#6f4e37' : cat === 'ep' ? '#3498db' : '#e67e22', fontSize: '1.1rem' }}>
-                    {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : cat === 'coffee' ? '☕ Cà Phê Phin' : cat === 'ep' ? '🥤 Nước Ép Trái Cây Tươi' : '🍢 Đồ Ăn Vặt & Nem Nướng'}
+                    {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : cat === 'coffee' ? '☕ Cà Phê Phin' : cat === 'ep' ? '🥤 Nước Ép Trái Cây Tươi' : cat === 'food' ? '🍢 Đồ Ăn Vặt & Nem Nướng' : '🛵 Đơn App Online (ShopeeFood / Grab)'}
                   </h2>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
                     {MENU.filter(m => m.category === cat).map(item => (
@@ -408,7 +421,7 @@ export default function StaffPage() {
                           {o.lines ? o.lines.map((i: any) => i.name + ' x' + i.qty).join(', ') : ''}
                         </td>
                         <td style={{ padding: '8px' }}>
-                          {o.paymentMethod === 'chuyenkhoan' ? '💳 Chuyển khoản' : '💵 Tiền mặt'}
+                          {o.paymentMethod === 'app' ? '🛵 App Online' : o.paymentMethod === 'chuyenkhoan' ? '💳 Chuyển khoản' : '💵 Tiền mặt'}
                         </td>
                         <td style={{ padding: '8px', textAlign: 'right', color: '#10b981', fontWeight: 'bold' }}>
                           {fmtVND(o.total || 0)}
