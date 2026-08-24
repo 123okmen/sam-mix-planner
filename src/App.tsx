@@ -2,10 +2,11 @@ import { useState } from 'react';
 import LandingPage from './pages/LandingPage';
 import PosPage from './pages/PosPage';
 import StaffPage from './pages/StaffPage';
+import PlannerPage from './pages/PlannerPage';
 import './App.css';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'landing' | 'pos' | 'staff'>('landing');
+  const [activeTab, setActiveTab] = useState<'landing' | 'pos' | 'staff' | 'planner'>('landing');
 
   return (
     <div className="app-container">
@@ -34,6 +35,12 @@ export default function App() {
             >
               👥 Nhân Viên
             </button>
+            <button 
+              className={activeTab === 'planner' ? 'nav-tab active' : 'nav-tab'}
+              onClick={() => setActiveTab('planner')}
+            >
+              📊 Báo Cáo Cổ Đông
+            </button>
           </nav>
         </div>
       </header>
@@ -42,6 +49,7 @@ export default function App() {
         {activeTab === 'landing' && <LandingPage />}
         {activeTab === 'pos' && <PosPage />}
         {activeTab === 'staff' && <StaffPage />}
+        {activeTab === 'planner' && <PlannerPage />}
       </main>
     </div>
   );
