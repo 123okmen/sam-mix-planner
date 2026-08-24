@@ -183,7 +183,7 @@ export default function LandingPage() {
           </div>
 
           <div className="landing-footer">
-              📍 Địa chỉ: Chung cư Conic Garden, Khu dân cư Conic, Bình Chánh &nbsp;|&nbsp; ⏰ Giờ mở cửa: Ca Sáng 06:00 - 11:00 | Ca Gãy 13:00 - 16:00 | Ca Chiều Tối 16:00 - 21:00 &nbsp;|&nbsp; 🍃 Healthy & Fresh
+              📍 Địa chỉ: Chung cư Conic Garden, Khu dân cư Conic, Bình Chánh &nbsp;|&nbsp; ⏰ Giờ mở cửa: Ca Sáng 07:00 - 12:00 | Ca Trưa 12:00 - 16:00 | Ca Tối 16:00 - 21:00 &nbsp;|&nbsp; 🍃 Healthy & Fresh
           </div>
       </div>
     </div>

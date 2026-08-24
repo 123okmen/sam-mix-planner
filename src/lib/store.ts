@@ -38,7 +38,7 @@ export interface Order {
   id: string;
   time: string;
   staff: string;
-  shift: 'sang' | 'gay' | 'chieu';
+  shift: 'sang' | 'trua' | 'toi' | 'gay' | 'chieu';
   lines: OrderLine[];
   total: number;
   cash?: number;
@@ -93,17 +93,17 @@ export async function syncOrder(order: Order): Promise<boolean> {
   }
 }
 
-export function getShift(): 'sang' | 'gay' | 'chieu' {
+export function getShift(): 'sang' | 'trua' | 'toi' | 'gay' | 'chieu' {
   const h = new Date().getHours();
-  if (h >= 6 && h < 11) return 'sang';
-  if (h >= 11 && h < 16) return 'gay';
-  return 'chieu';
+  if (h >= 7 && h < 12) return 'sang';
+  if (h >= 12 && h < 16) return 'trua';
+  return 'toi';
 }
 
 export function shiftLabel(s: string): string {
-  if (s === 'sang') return 'Sáng (6h-11h)';
-  if (s === 'gay') return 'Ca gãy (13h-16h)';
-  return 'Chiều tối (16h-21h)';
+  if (s === 'sang') return 'Ca Sáng (7h-12h)';
+  if (s === 'trua' || s === 'gay') return 'Ca Trưa (12h-16h)';
+  return 'Ca Tối (16h-21h)';
 }
 
 export function fmtVND(n: number): string {

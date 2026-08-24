@@ -11,7 +11,7 @@ export default function StaffPage() {
   const [tab, setTab] = useState<'pos' | 'shift' | 'off' | 'report' | 'recipes'>('pos');
   const [offData, setOffData] = useState({ date: new Date().toISOString().slice(0,10), shift: 'sang', reason: '' });
   const [staff, setStaff] = useState('');
-  const [shift, setShift] = useState<'sang' | 'gay' | 'chieu'>(getShift());
+  const [shift, setShift] = useState<'sang' | 'trua' | 'toi' | 'gay' | 'chieu'>(getShift());
   const [cart, setCart] = useState<OrderLine[]>([]);
   const [cash, setCash] = useState('');
   const [toast, setToast] = useState('');
@@ -151,7 +151,7 @@ export default function StaffPage() {
   const handleCheckIn = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-in...');
-    const shiftText = shift === 'sang' ? 'Ca Sáng (6h-11h)' : shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const shiftText = shift === 'sang' ? 'Ca Sáng (7h-12h)' : shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
     const ok = await postJson({ type: 'checkin', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(ok ? `Đã check-in ${shiftText} lúc: ${time}` : 'Chưa check-in (lỗi mạng)');
@@ -161,7 +161,7 @@ export default function StaffPage() {
   const handleCheckOut = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-out...');
-    const shiftText = shift === 'sang' ? 'Ca Sáng (6h-11h)' : shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const shiftText = shift === 'sang' ? 'Ca Sáng (7h-12h)' : shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
     const ok = await postJson({ type: 'checkout', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(ok ? `Đã check-out ${shiftText} lúc: ${time}` : 'Chưa check-out (lỗi mạng)');
@@ -222,7 +222,7 @@ export default function StaffPage() {
     if (!offData.reason.trim()) return alert('Vui lòng nhập lý do xin nghỉ!');
     setIsSubmitting(true);
 
-    const shiftText = offData.shift === 'sang' ? 'Ca Sáng (6h-11h)' : offData.shift === 'gay' ? 'Ca Gãy (13h-16h)' : 'Ca Chiều Tối (16h-21h)';
+    const shiftText = offData.shift === 'sang' ? 'Ca Sáng (7h-12h)' : offData.shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
     const ok = await postJson({
       type: 'off_request',
       staff: staff.trim(),
@@ -280,9 +280,9 @@ export default function StaffPage() {
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Ca làm việc *</div>
             <select className="input-field" style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', color: '#fff' }}
               value={shift} onChange={e => setShift(e.target.value as 'sang' | 'gay' | 'chieu')}>
-              <option value="sang" style={{ background: '#222' }}>🌅 Ca Sáng (6h - 11h)</option>
-              <option value="gay" style={{ background: '#222' }}>⚡ Ca Gãy (13h - 16h)</option>
-              <option value="chieu" style={{ background: '#222' }}>🌙 Ca Chiều Tối (16h - 21h)</option>
+              <option value="sang" style={{ background: '#222' }}>🌅 Ca Sáng (7h - 12h)</option>
+              <option value="trua" style={{ background: '#222' }}>⚡ Ca Trưa (12h - 16h)</option>
+              <option value="toi" style={{ background: '#222' }}>🌙 Ca Tối (16h - 21h)</option>
             </select>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -486,9 +486,9 @@ export default function StaffPage() {
                 <label style={{ fontSize: "0.85rem", display: "block", marginBottom: "6px" }}>Ca xin nghỉ *</label>
                 <select className="input-field" style={{ width: "100%", padding: "0.6rem 1rem", background: "rgba(255,255,255,0.1)", color: "#fff" }}
                   value={offData.shift} onChange={e => setOffData({ ...offData, shift: e.target.value })}>
-                  <option value="sang" style={{ background: "#222" }}>🌅 Ca Sáng (6h - 11h)</option>
-                  <option value="gay" style={{ background: "#222" }}>⚡ Ca Gãy (13h - 16h)</option>
-                  <option value="chieu" style={{ background: "#222" }}>🌙 Ca Chiều Tối (16h - 21h)</option>
+                  <option value="sang" style={{ background: "#222" }}>🌅 Ca Sáng (7h - 12h)</option>
+                  <option value="trua" style={{ background: "#222" }}>⚡ Ca Trưa (12h - 16h)</option>
+                  <option value="toi" style={{ background: "#222" }}>🌙 Ca Tối (16h - 21h)</option>
                 </select>
               </div>
               <div>

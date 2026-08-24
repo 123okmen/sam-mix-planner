@@ -5,7 +5,7 @@ import type { Order, OrderLine } from '../lib/store';
 
 export default function PosPage() {
   const [staff, setStaff] = useState('');
-  const [shift, setShift] = useState<'sang' | 'gay' | 'chieu'>(getShift());
+  const [shift, setShift] = useState<'sang' | 'trua' | 'toi' | 'gay' | 'chieu'>(getShift());
   const [cart, setCart] = useState<OrderLine[]>([]);
   const [cash, setCash] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
@@ -74,11 +74,11 @@ export default function PosPage() {
             <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
               <button onClick={() => setShift('sang')} className="btn-primary"
                 style={{ padding: '0.4rem 1rem', fontSize: '0.85rem', background: shift === 'sang' ? '#1e7145' : 'rgba(255,255,255,0.1)' }}>
-                🌅 Sáng (6h-11h)
+                🌅 Ca Sáng (7h-12h)
               </button>
               <button onClick={() => setShift('chieu')} className="btn-primary"
                 style={{ padding: '0.4rem 1rem', fontSize: '0.85rem', background: shift === 'chieu' ? '#d35400' : 'rgba(255,255,255,0.1)' }}>
-                🌆 Chiều tối (16h-21h)
+                🌙 Ca Tối (16h-21h)
               </button>
             </div>
           </div>
