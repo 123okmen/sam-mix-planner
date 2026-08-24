@@ -1,27 +1,48 @@
-import { HashRouter, Routes, Route, Link } from 'react-router-dom';
+import { useState } from 'react';
 import LandingPage from './pages/LandingPage';
-import PlannerPage from './pages/PlannerPage';
+import PosPage from './pages/PosPage';
 import StaffPage from './pages/StaffPage';
-import B2QuizPage from './pages/B2QuizPage';
-import './index.css';
+import './App.css';
 
-function App() {
+export default function App() {
+  const [activeTab, setActiveTab] = useState<'landing' | 'pos' | 'staff'>('landing');
+
   return (
-    <HashRouter>
-      <nav style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 1000, background: 'rgba(0,0,0,0.8)', padding: '10px 16px', borderRadius: '8px', display: 'flex', gap: '15px', flexWrap: 'wrap', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🏠 Trang Chủ</Link>
-        <Link to="/staff" style={{ color: '#10b981', textDecoration: 'none', fontWeight: 'bold' }}>🧑‍🍳 Nhân Viên</Link>
-        <Link to="/planner" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📊 Cổ Đông</Link>
-        <Link to="/b2-quiz" style={{ color: '#fbbf24', textDecoration: 'none', fontWeight: 'bold' }}>🚗 Thi Lý Thuyết B2</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/staff" element={<StaffPage />} />
-        <Route path="/planner" element={<PlannerPage />} />
-        <Route path="/b2-quiz" element={<B2QuizPage />} />
-      </Routes>
-    </HashRouter>
+    <div className="app-container">
+      <header className="app-header">
+        <div className="header-content">
+          <div className="brand">
+            <span className="brand-icon">🌿</span>
+            <span className="brand-title">SÂM MIX</span>
+          </div>
+          <nav className="nav-tabs">
+            <button 
+              className={activeTab === 'landing' ? 'nav-tab active' : 'nav-tab'}
+              onClick={() => setActiveTab('landing')}
+            >
+              🏠 Trang Chủ (Khách)
+            </button>
+            <button 
+              className={activeTab === 'pos' ? 'nav-tab active' : 'nav-tab'}
+              onClick={() => setActiveTab('pos')}
+            >
+              💻 Bán Hàng (POS)
+            </button>
+            <button 
+              className={activeTab === 'staff' ? 'nav-tab active' : 'nav-tab'}
+              onClick={() => setActiveTab('staff')}
+            >
+              👥 Nhân Viên
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <main className="app-main">
+        {activeTab === 'landing' && <LandingPage />}
+        {activeTab === 'pos' && <PosPage />}
+        {activeTab === 'staff' && <StaffPage />}
+      </main>
+    </div>
   );
 }
-
-export default App;
