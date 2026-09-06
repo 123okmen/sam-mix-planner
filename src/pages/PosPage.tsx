@@ -74,11 +74,11 @@ export default function PosPage() {
             <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
               <button onClick={() => setShift('sang')} className="btn-primary"
                 style={{ padding: '0.4rem 1rem', fontSize: '0.85rem', background: shift === 'sang' ? '#1e7145' : 'rgba(255,255,255,0.1)' }}>
-                🌅 Ca Sáng (7h-12h)
+                🌅 Ca Sáng (7h30-12h30)
               </button>
               <button onClick={() => setShift('chieu')} className="btn-primary"
                 style={{ padding: '0.4rem 1rem', fontSize: '0.85rem', background: shift === 'chieu' ? '#d35400' : 'rgba(255,255,255,0.1)' }}>
-                🌙 Ca Tối (16h-21h)
+                🌆 Ca Chiều Tối (13h-21h)
               </button>
             </div>
           </div>

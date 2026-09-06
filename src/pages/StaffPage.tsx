@@ -151,7 +151,7 @@ export default function StaffPage() {
   const handleCheckIn = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-in...');
-    const shiftText = shift === 'sang' ? 'Ca Sáng (7h-12h)' : shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
+    const shiftText = shift === 'sang' ? 'Ca Sáng (7h30-12h30)' : 'Ca Chiều Tối (13h-21h)';
     const ok = await postJson({ type: 'checkin', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(ok ? `Đã check-in ${shiftText} lúc: ${time}` : 'Chưa check-in (lỗi mạng)');
@@ -161,7 +161,7 @@ export default function StaffPage() {
   const handleCheckOut = async () => {
     if (!staff.trim()) return alert('Vui lòng nhập tên nhân viên!');
     setShiftStatus('Đang xử lý Check-out...');
-    const shiftText = shift === 'sang' ? 'Ca Sáng (7h-12h)' : shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
+    const shiftText = shift === 'sang' ? 'Ca Sáng (7h30-12h30)' : 'Ca Chiều Tối (13h-21h)';
     const ok = await postJson({ type: 'checkout', staff: staff.trim(), shift: shiftText });
     const time = new Date().toLocaleString('vi-VN');
     setShiftStatus(ok ? `Đã check-out ${shiftText} lúc: ${time}` : 'Chưa check-out (lỗi mạng)');
@@ -222,7 +222,7 @@ export default function StaffPage() {
     if (!offData.reason.trim()) return alert('Vui lòng nhập lý do xin nghỉ!');
     setIsSubmitting(true);
 
-    const shiftText = offData.shift === 'sang' ? 'Ca Sáng (7h-12h)' : offData.shift === 'gay' ? 'Ca Trưa (12h-16h)' : 'Ca Tối (16h-21h)';
+    const shiftText = offData.shift === 'sang' ? 'Ca Sáng (7h30-12h30)' : 'Ca Chiều Tối (13h-21h)';
     const ok = await postJson({
       type: 'off_request',
       staff: staff.trim(),
@@ -486,9 +486,8 @@ export default function StaffPage() {
                 <label style={{ fontSize: "0.85rem", display: "block", marginBottom: "6px" }}>Ca xin nghỉ *</label>
                 <select className="input-field" style={{ width: "100%", padding: "0.6rem 1rem", background: "rgba(255,255,255,0.1)", color: "#fff" }}
                   value={offData.shift} onChange={e => setOffData({ ...offData, shift: e.target.value })}>
-                  <option value="sang" style={{ background: "#222" }}>🌅 Ca Sáng (7h - 12h)</option>
-                  <option value="trua" style={{ background: "#222" }}>⚡ Ca Trưa (12h - 16h)</option>
-                  <option value="toi" style={{ background: "#222" }}>🌙 Ca Tối (16h - 21h)</option>
+                  <option value="sang" style={{ background: "#222" }}>🌅 Ca Sáng (7h30 - 12h30)</option>
+                  <option value="chieu" style={{ background: "#222" }}>🌆 Ca Chiều Tối (13h - 21h)</option>
                 </select>
               </div>
               <div>
@@ -533,7 +532,7 @@ export default function StaffPage() {
 
             <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '14px', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
               <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#f1c40f', marginBottom: '8px' }}>
-                📊 Thống kê TRONG CA HIỆN TẠI (Ca {shift === 'sang' ? 'Sáng (6h-11h)' : shift === 'gay' ? 'Gãy (13h-16h)' : 'Chiều tối (16h-21h)'}):
+                📊 Thống kê TRONG CA HIỆN TẠI (Ca {shift === 'sang' ? 'Sáng (7h30-12h30)' : 'Chiều Tối (13h-21h)'}):
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px', textAlign: 'center' }}>
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px' }}>

@@ -8,9 +8,8 @@ export interface ShiftTime {
 }
 
 export const SHIFTS = {
-  morning: { start: '07:00', end: '12:00', name: 'Ca Sáng (7h-12h)' },
-  split: { start: '12:00', end: '16:00', name: 'Ca Trưa (12h-16h)' },
-  evening: { start: '16:00', end: '21:00', name: 'Ca Tối (16h-21h)' }
+  morning: { start: '07:30', end: '12:30', name: 'Ca Sáng (7h30-12h30)' },
+  evening: { start: '13:00', end: '21:00', name: 'Ca Chiều Tối (13h-21h)' }
 };
 
 /**
@@ -22,9 +21,9 @@ export const validateShiftTime = (): { isValid: boolean; currentShift: string | 
   const minute = now.getMinutes();
   const currentTime = hour * 60 + minute;
 
-  // Ca sáng: 7:00 - 12:00
+  // Ca sáng: 7:30 - 12:30
   if (currentTime >= 7 * 60 && currentTime < 12 * 60) {
-    return { isValid: true, currentShift: 'Ca Sáng (7:00 - 12:00)' };
+    return { isValid: true, currentShift: 'Ca Sáng (7:30 - 12:30)' };
   }
   
   // Ca trưa: 12:00 - 16:00
@@ -32,9 +31,9 @@ export const validateShiftTime = (): { isValid: boolean; currentShift: string | 
     return { isValid: true, currentShift: 'Ca Trưa (12:00 - 16:00)' };
   }
   
-  // Ca chiều tối: 16:00 - 21:00
+  // Ca chiều tối: 13:00 - 21:00
   if (currentTime >= 16 * 60 && currentTime <= 21 * 60 + 30) {
-    return { isValid: true, currentShift: 'Ca Tối (16:00 - 21:00)' };
+    return { isValid: true, currentShift: 'Ca Chiều Tối (13:00 - 21:00)' };
   }
 
   return { isValid: true, currentShift: 'Ngoài giờ chính thức' };
