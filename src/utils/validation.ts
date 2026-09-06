@@ -22,17 +22,12 @@ export const validateShiftTime = (): { isValid: boolean; currentShift: string | 
   const currentTime = hour * 60 + minute;
 
   // Ca sáng: 7:30 - 12:30
-  if (currentTime >= 7 * 60 && currentTime < 12 * 60) {
+  if (currentTime >= 7 * 60 + 30 && currentTime <= 12 * 60 + 30) {
     return { isValid: true, currentShift: 'Ca Sáng (7:30 - 12:30)' };
   }
   
-  // Ca trưa: 12:00 - 16:00
-  if (currentTime >= 12 * 60 && currentTime < 16 * 60) {
-    return { isValid: true, currentShift: 'Ca Trưa (12:00 - 16:00)' };
-  }
-  
   // Ca chiều tối: 13:00 - 21:00
-  if (currentTime >= 16 * 60 && currentTime <= 21 * 60 + 30) {
+  if (currentTime >= 13 * 60 && currentTime <= 21 * 60) {
     return { isValid: true, currentShift: 'Ca Chiều Tối (13:00 - 21:00)' };
   }
 

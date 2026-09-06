@@ -102,7 +102,7 @@ export function getShift(): 'sang' | 'trua' | 'toi' | 'gay' | 'chieu' {
 
 export function shiftLabel(s: string): string {
   if (s === 'sang') return 'Ca Sáng (7h30-12h30)';
-  if (s === 'trua' || s === 'gay') return 'Ca Trưa (12h30-13h00)';
+  if (s === 'trua' || s === 'gay') return 'Ca Chiều Tối (13h-21h)';
   return 'Ca Chiều Tối (13h-21h)';
 }
 

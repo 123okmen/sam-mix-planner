@@ -280,9 +280,8 @@ export default function StaffPage() {
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Ca làm việc *</div>
             <select className="input-field" style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', color: '#fff' }}
               value={shift} onChange={e => setShift(e.target.value as 'sang' | 'gay' | 'chieu')}>
-              <option value="sang" style={{ background: '#222' }}>🌅 Ca Sáng (7h - 12h)</option>
-              <option value="trua" style={{ background: '#222' }}>⚡ Ca Trưa (12h - 16h)</option>
-              <option value="toi" style={{ background: '#222' }}>🌙 Ca Tối (16h - 21h)</option>
+              <option value="sang" style={{ background: '#222' }}>🌅 Ca Sáng (7h30 - 12h30)</option>
+              <option value="chieu" style={{ background: '#222' }}>🌆 Ca Chiều Tối (13h00 - 21h00)</option>
             </select>
           </div>
           <div style={{ textAlign: 'right' }}>

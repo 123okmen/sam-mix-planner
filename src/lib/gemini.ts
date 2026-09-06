@@ -2,7 +2,7 @@ const BASE_PLAN = `
 **Dự Án Trạm Nước Sâm Mix & Mía Mix Healthy**
 - **Vị trí:** Khu dân cư Conic Bình Chánh, sân bãi 60m2.
 - **Vốn đầu tư:** 80 Triệu VNĐ (Chia cho 4 cổ đông).
-- **Mô hình:** Vận hành ca gãy (Sáng: 6h-9h mang đi, Trưa: 12h-18h đóng cửa, Tối: 18h-22h30 Detox & Chill). Nói không với cafe, bia rượu, thuốc lá.
+- **Mô hình:** Vận hành ca gãy (Ca Sáng: 7h30-12h30, Ca Chiều Tối: 13h00-21h00). Nói không với cafe, bia rượu, thuốc lá.
 - **Phong cách:** Cắm trại ngoài trời (Camping), dùng cỏ nhân tạo, bàn ghế gỗ xếp dã ngoại, quầy gỗ mộc mạc, đèn LED búp chanh.
 `;
 
