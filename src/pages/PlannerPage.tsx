@@ -35,25 +35,51 @@ interface StaffPayrollContract {
 // Staff list EXCLUDING Khanh (Shareholder/Owner)
 // Only actual employees: Nguyen Thi Minh Thu, Le Thi Vy, Tran My Linh
 const INITIAL_EMPLOYEE_LIST: Record<string, StaffPayrollContract[]> = {
-  '2026-06': [
-    { id: '1', name: 'NGUYỄN THỊ MINH THƯ', phone: '0342.872.602', bankName: 'MBBank', accountNumber: '0704947773', contractCode: 'HĐLD-PARTTIME-SAMMIX-THU-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 24, totalHours: 120, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 3, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 50000, isPaid: true },
-    { id: '2', name: 'LÊ THỊ VY', phone: '0388.xxx.xxx', bankName: 'MBBank', accountNumber: '0988776655', contractCode: 'HĐTV-PARTTIME-SAMMIX-VY-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 20, totalHours: 100, lateCount: 1, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 2, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 0, isPaid: true },
-    { id: '3', name: 'TRẦN MỸ LINH', phone: '0399.xxx.xxx', bankName: 'Vietcombank', accountNumber: '1011223344', contractCode: 'HĐTV-PARTTIME-SAMMIX-LINH-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 18, totalHours: 90, lateCount: 0, isFullShifts: false, isKpiAchieved: false, hotSalesShifts: 1, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 0, isPaid: true }
-  ],
-  '2026-07': [
-    { id: '1', name: 'NGUYỄN THỊ MINH THƯ', phone: '0342.872.602', bankName: 'MBBank', accountNumber: '0704947773', contractCode: 'HĐLD-PARTTIME-SAMMIX-THU-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 26, totalHours: 130, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 5, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 100000, isPaid: true },
-    { id: '2', name: 'LÊ THỊ VY', phone: '0388.xxx.xxx', bankName: 'MBBank', accountNumber: '0988776655', contractCode: 'HĐTV-PARTTIME-SAMMIX-VY-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 22, totalHours: 110, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 3, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 50000, isPaid: true },
-    { id: '3', name: 'TRẦN MỸ LINH', phone: '0399.xxx.xxx', bankName: 'Vietcombank', accountNumber: '1011223344', contractCode: 'HĐTV-PARTTIME-SAMMIX-LINH-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 21, totalHours: 105, lateCount: 1, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 2, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 0, isPaid: true }
-  ],
-  '2026-08': [
-    { id: '1', name: 'NGUYỄN THỊ MINH THƯ', phone: '0342.872.602', bankName: 'MBBank', accountNumber: '0704947773', contractCode: 'HĐLD-PARTTIME-SAMMIX-THU-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 27, totalHours: 135, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 6, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 150000, isPaid: true },
-    { id: '2', name: 'LÊ THỊ VY', phone: '0388.xxx.xxx', bankName: 'MBBank', accountNumber: '0988776655', contractCode: 'HĐTV-PARTTIME-SAMMIX-VY-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 23, totalHours: 115, lateCount: 1, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 3, hotSalesBonusPerShift: 25000, penalties: 20000, otherBonus: 50000, isPaid: true },
-    { id: '3', name: 'TRẦN MỸ LINH', phone: '0399.xxx.xxx', bankName: 'Vietcombank', accountNumber: '1011223344', contractCode: 'HĐTV-PARTTIME-SAMMIX-LINH-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 22, totalHours: 110, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 2, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 50000, isPaid: true }
-  ],
   '2026-09': [
-    { id: '1', name: 'NGUYỄN THỊ MINH THƯ', phone: '0342.872.602', bankName: 'MBBank', accountNumber: '0704947773', contractCode: 'HĐLD-PARTTIME-SAMMIX-THU-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 26, totalHours: 130, lateCount: 0, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 4, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 100000, isPaid: true },
-    { id: '2', name: 'LÊ THỊ VY', phone: '0388.xxx.xxx', bankName: 'MBBank', accountNumber: '0988776655', contractCode: 'HĐTV-PARTTIME-SAMMIX-VY-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 22, totalHours: 110, lateCount: 1, isFullShifts: true, isKpiAchieved: true, hotSalesShifts: 2, hotSalesBonusPerShift: 25000, penalties: 30000, otherBonus: 50000, isPaid: true },
-    { id: '3', name: 'TRẦN MỸ LINH', phone: '0399.xxx.xxx', bankName: 'Vietcombank', accountNumber: '1011223344', contractCode: 'HĐTV-PARTTIME-SAMMIX-LINH-2026', bac1Rate: 22000, bac2Rate: 3000, bac3Rate: 5000, extraShiftBonusRate: 30000, shiftsCount: 20, totalHours: 100, lateCount: 0, isFullShifts: true, isKpiAchieved: false, hotSalesShifts: 1, hotSalesBonusPerShift: 25000, penalties: 0, otherBonus: 0, isPaid: true }
+    {
+      id: '1',
+      name: 'NGUYỄN THỊ MINH THƯ',
+      phone: '0342.872.602',
+      bankName: 'MBBank',
+      accountNumber: '0704947773',
+      contractCode: 'HĐLD-PARTTIME-SAMMIX-THU-2026',
+      bac1Rate: 22000,
+      bac2Rate: 3000,
+      bac3Rate: 5000,
+      extraShiftBonusRate: 30000,
+      shiftsCount: 9,
+      totalHours: 45,
+      lateCount: 0,
+      isFullShifts: true,
+      isKpiAchieved: true,
+      hotSalesShifts: 0,
+      hotSalesBonusPerShift: 25000,
+      penalties: 0,
+      otherBonus: 0,
+      isPaid: false
+    },
+    {
+      id: '2',
+      name: 'THÚY AN',
+      phone: '090x.xxx.xxx',
+      bankName: 'MBBank',
+      accountNumber: '1122334455',
+      contractCode: 'HĐTV-PARTTIME-SAMMIX-AN-2026',
+      bac1Rate: 22000,
+      bac2Rate: 3000,
+      bac3Rate: 5000,
+      extraShiftBonusRate: 30000,
+      shiftsCount: 1,
+      totalHours: 5,
+      lateCount: 0,
+      isFullShifts: false,
+      isKpiAchieved: false,
+      hotSalesShifts: 0,
+      hotSalesBonusPerShift: 25000,
+      penalties: 0,
+      otherBonus: 0,
+      isPaid: false
+    }
   ]
 };
 
@@ -108,19 +134,44 @@ export default function PlannerPage() {
         setErr(null);
         setLastUpdate(new Date().toLocaleTimeString('vi-VN'));
 
-        // Auto sync check-in & order counts to Staff list (Excluding Khanh)
-        if (d.nv && d.nv.names && d.nv.donVals) {
+        // Tự động đối soát và tính số ca/doanh số thực tế từ Báo Cáo Cuối Ca cho 2 NV: Minh Thư & Thúy An
+        if (d.baoCao && Array.isArray(d.baoCao)) {
+          const sepBaoCao = d.baoCao.filter((b: any) => (b.ngay || '').endsWith('/09/2026'));
+          
+          let thuShifts = 0;
+          let thuRev = 0;
+          let anShifts = 0;
+          let anRev = 0;
+
+          sepBaoCao.forEach((b: any) => {
+            const nv = (b.nv || '').toLowerCase();
+            const rev = Number(b.doanhThu || 0);
+            if (nv.includes('thư')) {
+              thuShifts += 1;
+              thuRev += rev;
+            } else if (nv.includes('an')) {
+              anShifts += 1;
+              anRev += rev;
+            }
+          });
+
           setStaffList(prev => prev.map(s => {
-            const idx = d.nv.names.findIndex((name: string) => 
-              name.toLowerCase().includes(s.name.split(' ').pop()?.toLowerCase() || '')
-            );
-            if (idx >= 0) {
-              const ordersCount = d.nv.donVals[idx] || 0;
-              // Dynamically adjust shifts count and hot sales shifts based on real orders
-              const autoHotShifts = Math.floor(ordersCount / 5);
-              return { 
-                ...s, 
-                hotSalesShifts: autoHotShifts > 0 ? autoHotShifts : s.hotSalesShifts 
+            if (s.name.includes('MINH THƯ')) {
+              return {
+                ...s,
+                shiftsCount: thuShifts > 0 ? thuShifts : s.shiftsCount,
+                totalHours: (thuShifts > 0 ? thuShifts : s.shiftsCount) * 5,
+                isFullShifts: (thuShifts >= 20 || thuShifts * 5 >= 90),
+                isKpiAchieved: thuShifts > 0 ? (thuRev / thuShifts) >= 350000 : s.isKpiAchieved
+              };
+            }
+            if (s.name.includes('THÚY AN')) {
+              return {
+                ...s,
+                shiftsCount: anShifts > 0 ? anShifts : s.shiftsCount,
+                totalHours: (anShifts > 0 ? anShifts : s.shiftsCount) * 5,
+                isFullShifts: (anShifts >= 20 || anShifts * 5 >= 90),
+                isKpiAchieved: anShifts > 0 ? (anRev / anShifts) >= 350000 : s.isKpiAchieved
               };
             }
             return s;
