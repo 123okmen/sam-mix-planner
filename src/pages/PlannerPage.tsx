@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import Chart from 'chart.js/auto';
 import LoginGate from '../components/LoginGate';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbz-75MfvgUDcWexbQ6hJbyT42P3gVm5R6l585fnRMBC8sd_pMZyh9mJbMAa98HpsfAk/exec?action=data';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyETg2znWnDrNsgq3G2eB0IJxFeb_GdLKo5N68FkFlJVMvTzdt_M_C3YFzL7fcgiyY1/exec?action=data';
 
 const fmtVND = (v: number) => (v || 0).toLocaleString('vi-VN') + ' đ';
 
