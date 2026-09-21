@@ -107,6 +107,30 @@ export default function LandingPage() {
                       </div>
                       <div className="item-price">15K</div>
                   </div>
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}oc_buou_nhoi_thit.jpg`} alt="Ốc Bươu Nhồi Thịt" />
+                      <div className="item-info">
+                          <h3 className="item-name">2. Ốc Bươu Nhồi Thịt</h3>
+                              <div className="item-note">Nóng hổi · kèm nước chấm sả tắc</div>
+                      </div>
+                      <div className="item-price">50K</div>
+                  </div>
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}long_bo_sua_nuong.jpg`} alt="Lòng Bò Sữa Nướng" />
+                      <div className="item-info">
+                          <h3 className="item-name">3. Lòng Bò Sữa Nướng</h3>
+                              <div className="item-note">Béo ngậy · nướng sả ớt đậm đà</div>
+                      </div>
+                      <div className="item-price">60K</div>
+                  </div>
+                  <div className="menu-item">
+                      <img className="item-thumb" src={`${import.meta.env.BASE_URL}vu_heo_dau_bap.jpg`} alt="Vú Heo Đậu Bắp" />
+                      <div className="item-info">
+                          <h3 className="item-name">4. Vú Heo Đậu Bắp</h3>
+                              <div className="item-note">Giòn sần sật · kèm đậu bắp nướng</div>
+                      </div>
+                      <div className="item-price">60K</div>
+                  </div>
               </div>
 
               {/* Nước Ép Column */}

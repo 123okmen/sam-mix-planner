@@ -29,6 +29,9 @@ const MENU_ITEMS = [
   { id: 'ep_coc', name: 'Cóc Non', originalPrice: 20000 },
   { id: 'ep_cantay', name: 'Cần Tây Mix Táo', originalPrice: 30000 },
   { id: 'nem_nuong', name: 'Nem Nướng', originalPrice: 15000 },
+  { id: 'oc_buou_nhoi_thit', name: 'Ốc Bươu Nhồi Thịt', originalPrice: 50000 },
+  { id: 'long_bo_sua_nuong', name: 'Lòng Bò Sữa Nướng', originalPrice: 60000 },
+  { id: 'vu_heo_dau_bap', name: 'Vú Heo Đậu Bắp', originalPrice: 60000 },
 ];
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-75MfvgUDcWexbQ6hJbyT42P3gVm5R6l585fnRMBC8sd_pMZyh9mJbMAa98HpsfAk/exec";

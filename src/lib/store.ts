@@ -23,6 +23,9 @@ export const MENU: MenuItem[] = [
   { id: 'ep-coc',          name: 'Cóc Non',               price: 20000, category: 'ep',  img: 'coc.jpeg' },
   { id: 'ep-trai-cay-mix',  name: 'Ép Trái Cây Mix',      price: 25000, category: 'ep',  img: 'cantay.JPG' },
   { id: 'nem-nuong',       name: 'Nem Nướng',             price: 15000, category: 'food', img: 'nem_nuong.jpg' },
+  { id: 'oc-buou-nhoi-thit', name: 'Ốc Bươu Nhồi Thịt',    price: 50000, category: 'food', img: 'oc_buou_nhoi_thit.jpg' },
+  { id: 'long-bo-sua-nuong', name: 'Lòng Bò Sữa Nướng',    price: 60000, category: 'food', img: 'long_bo_sua_nuong.jpg' },
+  { id: 'vu-heo-dau-bap',    name: 'Vú Heo Đậu Bắp',       price: 60000, category: 'food', img: 'vu_heo_dau_bap.jpg' },
   { id: 'app-online',      name: 'Đơn App Online (ShopeeFood / Grab)', price: 0, category: 'app', img: 'logo_v2.jpg' },
 ];
 
