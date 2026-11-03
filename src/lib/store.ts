@@ -95,7 +95,7 @@ export const MENU: MenuItem[] = [
     name: 'Vỏ Bánh Bao Hấp',
     price: 6000,
     category: 'bbk',
-    img: 'menu/bbk-1.jpg',
+    img: 'menu/bbk-6.jpg',
     description: 'Vỏ bánh bao hấp hình vỏ sò trắng muốt mềm xốp, thơm mùi sữa nhẹ'
   },
 

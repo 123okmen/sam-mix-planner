@@ -172,7 +172,7 @@ export default function LandingPage() {
             </div>
 
             <div className="menu-item">
-              <img className="item-thumb" src={getItemImgUrl('menu/bbk-1.jpg')} alt="Vỏ Bánh Bao" loading="lazy" />
+              <img className="item-thumb" src={getItemImgUrl('menu/bbk-6.jpg')} alt="Vỏ Bánh Bao" loading="lazy" />
               <div className="item-info">
                 <div className="item-name-row">
                   <h3 className="item-name">Vỏ Bánh Bao Hấp</h3>
