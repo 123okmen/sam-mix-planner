@@ -1,7 +1,7 @@
 // ============================================================
-// SAM MIX PLANNER - Apps Script OPTIMIZED (08/2026)
-// 3 tab: Cham cong | Don hang | Bao cao doanh thu
-// Real-time Telegram qua @Alicewordbot
+// SAM MIX PLANNER - Apps Script OPTIMIZED (2026)
+// 4 tab: Cham cong | Don hang | Bao cao doanh thu | Bao cao nghi ca
+// Real-time Telegram qua @Alicewordbot (Token: 8755799868:AAHKmMYP9TAm3fAFiGO0zLDYIpcddV90oFc)
 // ============================================================
 
 function doPost(e) {
@@ -14,6 +14,7 @@ function doPost(e) {
     if (type === 'order') return handleOrder(data);
     if (type === 'delete_order') return handleDeleteOrderSheet(data);
     if (type === 'summary') return handleSummary(data);
+    if (type === 'off_request') return handleOffRequest(data);
     return jsonOk('Khong ho tro type: ' + type);
   } catch (err) {
     return jsonErr(err.toString());
@@ -26,7 +27,6 @@ function getOrCreateSheet(name, headers) {
   var sheet = ss.getSheetByName(name);
   if (!sheet) sheet = ss.insertSheet(name);
 
-  // So sanh CA DONG header (khong chi o A1) -> setup lai dung theo truong
   var need = false;
   if (sheet.getLastRow() < 1) need = true;
   else {
@@ -48,9 +48,9 @@ function getOrCreateSheet(name, headers) {
 }
 
 function moneyFmt(v) {
-  if (v === '' || v === undefined || v === null) return '';
+  if (v === '' || v === undefined || v === null) return '0 d';
   var n = Number(v);
-  if (isNaN(n)) return v;
+  if (isNaN(n)) return String(v);
   return n.toLocaleString('vi-VN') + ' d';
 }
 
@@ -58,6 +58,7 @@ function num(v) {
   var n = Number(v);
   return isNaN(n) ? 0 : n;
 }
+
 function normDay(v) {
   if (v instanceof Date) return Utilities.formatDate(v, 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy');
   var s = String(v).trim();
@@ -67,6 +68,7 @@ function normDay(v) {
   }
   return s.substring(0, 10);
 }
+
 function normHour(v) {
   if (v instanceof Date) return Utilities.formatDate(v, 'Asia/Ho_Chi_Minh', 'HH:mm');
   var s = String(v).trim();
@@ -79,32 +81,35 @@ function normHour(v) {
   return s.substring(0, 5);
 }
 
-
-
 function getShiftLabel(h) {
-  if (h >= 6 && h < 11) return 'Sang (6h-11h)';
-  if (h >= 16 && h < 21) return 'Chieu toi (16h-21h)';
+  if (h >= 6 && h < 13) return 'Ca Sang (7h30-12h30)';
+  if (h >= 13 && h <= 22) return 'Ca Chieu Toi (13h-21h)';
   return 'Ngoai gio';
 }
 
 function nowParts() {
   var now = new Date();
+  var h = Number(Utilities.formatDate(now, 'Asia/Ho_Chi_Minh', 'HH'));
   return {
     ngay: Utilities.formatDate(now, 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
     gio: Utilities.formatDate(now, 'Asia/Ho_Chi_Minh', 'HH:mm:ss'),
-    ngayDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0),
+    ca: getShiftLabel(h),
+    ngayDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0)
   };
 }
 
 function jsonOk(msg) { return ContentService.createTextOutput(JSON.stringify({ ok: true, msg: msg })).setMimeType(ContentService.MimeType.JSON); }
 function jsonErr(msg) { return ContentService.createTextOutput(JSON.stringify({ ok: false, msg: msg })).setMimeType(ContentService.MimeType.JSON); }
+
 // ================= CHAM CONG =================
 function handleShift(data, type) {
   var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Thao tac', 'Ca', 'Ghi chu'];
   var sheet = getOrCreateSheet('Cham cong', headers);
   var t = nowParts();
   var label = type === 'checkin' ? 'CHECK-IN' : 'CHECK-OUT';
-  sheet.appendRow([Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'), t.gio, data.name || data.staff || '', label, t.ca, data.note || '']);
+  var staffName = data.name || data.staff || '';
+  var caTxt = data.shift || t.ca;
+  sheet.appendRow([t.ngay, t.gio, staffName, label, caTxt, data.note || '']);
 
   var r = sheet.getLastRow();
   var cell = sheet.getRange(r, 4);
@@ -115,9 +120,10 @@ function handleShift(data, type) {
   }
   sheet.getRange(r, 2).setNumberFormat('@');
   sheet.autoResizeColumns(1, 5);
+
   var emo = (type === 'checkin') ? String.fromCodePoint(0x2705) : String.fromCodePoint(0x1F534);
-  sendTelegram(emo + ' ' + label + ': ' + (data.name || data.staff) + ' luc ' + t.gio + ' (' + t.ca + ')');
-  return jsonOk('Da ghi nhan ' + label + ' cho ' + (data.name || data.staff) + ' luc ' + t.gio);
+  sendTelegram(emo + ' ' + label + ': ' + staffName + ' luc ' + t.gio + ' (' + caTxt + ')');
+  return jsonOk('Da ghi nhan ' + label + ' cho ' + staffName + ' luc ' + t.gio);
 }
 
 // ================= DON HANG (POS) =================
@@ -126,7 +132,6 @@ function handleOrder(data) {
   var sheet = getOrCreateSheet('Don hang', headers);
   var t = nowParts();
 
-  // Chi tiet mon hang: ho tro ca 3 dang (object array / JSON string / text items)
   var lines = [];
   var soMon = 0;
   var detail = data.detail;
@@ -160,15 +165,19 @@ function handleOrder(data) {
     soMon = 1;
   }
 
-  var shiftTxt = data.shift === 'sang' ? 'Sang (6h-11h)' : 'Chieu toi (16h-21h)';
+  var shiftTxt = (data.shift === 'sang' || data.shift === 'Ca Sang (7h30-12h30)') ? 'Ca Sang (7h30-12h30)' : 'Ca Chieu Toi (13h-21h)';
   var orderId = String(data.orderId || data.id || ('DH' + Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'HHmmss')));
   var noteTxt = data.note || '';
-  if (data.paymentMethod === 'chuyenkhoan' || data.payment_method === 'chuyenkhoan') {
+  var pMethod = data.paymentMethod || data.payment_method || 'tienmat';
+  if (pMethod === 'chuyenkhoan') {
     noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'Chuyen khoan';
+  } else if (pMethod === 'app') {
+    noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'App Online';
   }
+
   sheet.appendRow([
     orderId,
-    Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
+    t.ngay,
     t.gio,
     data.staff || data.name || '',
     shiftTxt,
@@ -186,29 +195,29 @@ function handleOrder(data) {
   sheet.getRange(r, 9).setNumberFormat('#,##0" d"');
   sheet.getRange(r, 10).setNumberFormat('#,##0" d"');
   sheet.getRange(r, 6).setWrap(true).setVerticalAlignment('top');
-  if (sheet.getLastRow() > 1) {
-    var lastRowD = sheet.getLastRow();
-    sheet.getRange(2, 2, lastRowD - 1, 1).setNumberFormat('@');
-    sheet.getRange(2, 3, lastRowD - 1, 1).setNumberFormat('@');
-  }
+  sheet.getRange(r, 2).setNumberFormat('@');
+  sheet.getRange(r, 3).setNumberFormat('@');
   sheet.autoResizeColumns(1, 7);
   return jsonOk('Da luu don hang ' + orderId + ' (' + soMon + ' mon, ' + moneyFmt(data.total) + ')');
 }
+
 // ================= BAO CAO DOANH THU =================
 function handleReport(data) {
   var headers = ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu'];
   var sheet = getOrCreateSheet('Bao cao doanh thu', headers);
   var t = nowParts();
   var noteTxt = data.note || data.ghi_chu || '';
-  if (data.transfer || data.tien_chuyen_khoan) {
-    var ck = num(data.transfer || data.tien_chuyen_khoan);
-    if (ck > 0) noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'Chuyen khoan: ' + moneyFmt(ck);
+  var ck = num(data.transfer || data.tien_chuyen_khoan);
+  if (ck > 0) {
+    noteTxt = (noteTxt ? noteTxt + ' | ' : '') + 'Chuyen khoan: ' + moneyFmt(ck);
   }
+  var caTxt = data.shift || t.ca;
+
   sheet.appendRow([
-    Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy'),
+    t.ngay,
     t.gio,
     data.name || data.staff || '',
-    t.ca,
+    caTxt,
     num(data.revenue || data.doanh_thu),
     num(data.cash || data.tien_mat),
     noteTxt
@@ -222,6 +231,36 @@ function handleReport(data) {
   sheet.autoResizeColumns(1, 5);
   return jsonOk('Da luu bao cao doanh thu ' + moneyFmt(data.revenue || data.doanh_thu) + ' cho ' + (data.name || data.staff || ''));
 }
+
+// ================= BAO CAO NGHI CA =================
+function handleOffRequest(data) {
+  var headers = ['Ngay gui', 'Gio gui', 'Ten nhan vien', 'Ngay xin nghi', 'Ca xin nghi', 'Ly do'];
+  var sheet = getOrCreateSheet('Bao cao nghi ca', headers);
+  var t = nowParts();
+  var staffName = data.staff || data.name || '';
+  sheet.appendRow([
+    t.ngay,
+    t.gio,
+    staffName,
+    data.date || '',
+    data.shift || '',
+    data.reason || ''
+  ]);
+
+  var r = sheet.getLastRow();
+  sheet.getRange(r, 3).setFontWeight('bold');
+  sheet.autoResizeColumns(1, 6);
+
+  var msg = String.fromCodePoint(0x1F3D6) + ' BAO CAO NGH\u0128 CA (OFF CA)\n'
+          + String.fromCodePoint(0x1F464) + ' Nhan vien: ' + staffName + '\n'
+          + String.fromCodePoint(0x1F4C5) + ' Ngay xin nghi: ' + (data.date || '') + '\n'
+          + String.fromCodePoint(0x23F0) + ' Ca: ' + (data.shift || '') + '\n'
+          + String.fromCodePoint(0x1F4DD) + ' Ly do: ' + (data.reason || 'Khong co');
+
+  sendTelegram(msg);
+  return jsonOk('Da luu don bao nghi ca cho ' + staffName);
+}
+
 // ================= BAO CAO TONG HOP CHI TIET (REAL-TIME) =================
 function handleSummary(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -230,7 +269,6 @@ function handleSummary(data) {
   var tongDoanhThu = 0, tongTienMat = 0, soDon = 0, soMon = 0;
   var nvMap = {};
 
-  // 1. Don hang hom nay
   var dh = ss.getSheetByName('Don hang');
   if (dh && dh.getLastRow() > 1) {
     var vals = dh.getRange(2, 1, dh.getLastRow() - 1, 11).getValues();
@@ -244,7 +282,6 @@ function handleSummary(data) {
     }
   }
 
-  // 2. Bao cao doanh thu hom nay
   var bc = ss.getSheetByName('Bao cao doanh thu');
   if (bc && bc.getLastRow() > 1) {
     var bvals = bc.getRange(2, 1, bc.getLastRow() - 1, 7).getValues();
@@ -254,14 +291,17 @@ function handleSummary(data) {
     }
   }
 
-  lines.push(String.fromCodePoint(0x1F4CA) + ' TONG KET ' + t.ngay);
+  lines.push(String.fromCodePoint(0x1F4CA) + ' TONG KET NGAY ' + t.ngay);
   lines.push(String.fromCodePoint(0x1F4C5) + ' ' + t.gio + ' | ' + t.ca);
-  lines.push('----------------------');
-  lines.push(String.fromCodePoint(0x1F6D2) + ' So don: ' + soDon + ' | So mon: ' + soMon);
+  lines.push('--------------------------------');
+  lines.push(String.fromCodePoint(0x1F6D2) + ' Tong so don: ' + soDon + ' | So mon: ' + soMon);
   lines.push(String.fromCodePoint(0x1F4B0) + ' Doanh thu: ' + moneyFmt(tongDoanhThu));
   lines.push(String.fromCodePoint(0x1F4B5) + ' Tien mat: ' + moneyFmt(tongTienMat));
+  if (tongDoanhThu > tongTienMat) {
+    lines.push(String.fromCodePoint(0x1F4B3) + ' Chuyen khoan/App: ' + moneyFmt(tongDoanhThu - tongTienMat));
+  }
   if (Object.keys(nvMap).length > 0) {
-    lines.push('----------------------');
+    lines.push('--------------------------------');
     lines.push('Theo nhan vien:');
     var names = Object.keys(nvMap);
     for (var n = 0; n < names.length; n++) {
@@ -272,6 +312,7 @@ function handleSummary(data) {
   sendTelegram(lines.join('\n'));
   return jsonOk('Da gui tong ket real-time');
 }
+
 // ================= TELEGRAM REAL-TIME =================
 var TG_BOT_TOKEN = '8755799868:AAHKmMYP9TAm3fAFiGO0zLDYIpcddV90oFc';
 var TG_CHAT_ID = '7220726428';
@@ -294,51 +335,40 @@ function sendTelegram(text) {
 }
 
 function tgOrderMsg(data, lines, soMon, shiftTxt, t, orderId) {
-  var msg = String.fromCodePoint(0x1F6D2) + ' DON MOI #' + orderId
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F464) + ' ' + (data.staff || data.name || '?') + ' | ' + shiftTxt + ' | ' + t.gio
-    lines.join('\n'),
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B0) + ' Tong: ' + moneyFmt(data.total);
-  if (data.cash) msg += String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B5) + ' Khach dua: ' + moneyFmt(data.cash);
+  var pMethod = (data.paymentMethod === 'chuyenkhoan' || data.payment_method === 'chuyenkhoan') ? 'Chuyen khoan' :
+                (data.paymentMethod === 'app' || data.payment_method === 'app') ? 'App Online' : 'Tien mat';
+
+  var msg = String.fromCodePoint(0x1F6D2) + ' DON MOI #' + orderId + '\n'
+          + String.fromCodePoint(0x1F464) + ' ' + (data.staff || data.name || 'Nhan vien') + ' | ' + shiftTxt + ' | ' + t.gio + '\n'
+          + String.fromCodePoint(0x1F4B3) + ' Thanh toan: ' + pMethod + '\n'
+          + '--------------------------------\n'
+          + lines.join('\n') + '\n'
+          + '--------------------------------\n'
+          + String.fromCodePoint(0x1F4E6) + ' So mon: ' + soMon + '\n'
+          + String.fromCodePoint(0x1F4B0) + ' TONG TIEN: ' + moneyFmt(data.total);
+
+  if (data.cash) msg += '\n' + String.fromCodePoint(0x1F4B5) + ' Khach dua: ' + moneyFmt(data.cash);
+  if (data.change) msg += '\n' + String.fromCodePoint(0x1FA99) + ' Tien thoi: ' + moneyFmt(data.change);
   var note = data.note || data.ghi_chu;
-  if (note) msg += String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4DD) + ' Ghi chu: ' + note;
+  if (note) msg += '\n' + String.fromCodePoint(0x1F4DD) + ' Ghi chu: ' + note;
   return msg;
 }
 
 function tgReportMsg(data, t) {
-  var msg = String.fromCodePoint(0x1F4CA) + ' BAO CAO DOANH THU'
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F464) + ' ' + (data.name || data.staff || '?') + ' | ' + t.ca + ' | ' + t.ngay + ' ' + t.gio
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B0) + ' Doanh thu: ' + moneyFmt(data.revenue || data.doanh_thu)
-          + String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4B5) + ' Tien mat: ' + moneyFmt(data.cash || data.tien_mat);
+  var ck = num(data.transfer || data.tien_chuyen_khoan);
+  var msg = String.fromCodePoint(0x1F4CA) + ' BAO CAO DOANH THU CUOI CA\n'
+          + String.fromCodePoint(0x1F464) + ' ' + (data.name || data.staff || 'Nhan vien') + ' | ' + t.ca + ' | ' + t.ngay + ' ' + t.gio + '\n'
+          + '--------------------------------\n'
+          + String.fromCodePoint(0x1F4B0) + ' TONG DOANH THU: ' + moneyFmt(data.revenue || data.doanh_thu) + '\n'
+          + String.fromCodePoint(0x1F4B5) + ' Tien mat: ' + moneyFmt(data.cash || data.tien_mat);
+
+  if (ck > 0) msg += '\n' + String.fromCodePoint(0x1F4B3) + ' Chuyen khoan: ' + moneyFmt(ck);
   var note = data.note || data.ghi_chu;
-  if (note) msg += String.fromCodePoint(0x0A) + String.fromCodePoint(0x1F4DD) + ' Ghi chu: ' + note;
+  if (note) msg += '\n' + String.fromCodePoint(0x1F4DD) + ' Ghi chu: ' + note;
   return msg;
 }
 
-
-// ================= DASHBOARD CO DONG - BIEU DO REAL-TIME =================
-
-// ================= API JSON CHO TRANG GITHUB (?action=data) =================
-
-// ================= RESET DU LIEU (xoa sach test, giu header) =================
-function handleReset() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  // Setup lai header DUNG THEO TRUONG truoc khi xoa du lieu
-  getOrCreateSheet('Don hang', ['Ma don', 'Ngay', 'Gio', 'Nhan vien', 'Ca', 'Mon hang (chi tiet)', 'So mon', 'Tong tien', 'Tien khach', 'Tien thoi', 'Ghi chu']);
-  getOrCreateSheet('Cham cong', ['Ngay', 'Gio', 'Ten nhan vien', 'Thao tac', 'Ca', 'Ghi chu']);
-  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu']);
-  var names = ['Don hang', 'Cham cong', 'Bao cao doanh thu'];
-  var msgs = [];
-  for (var i = 0; i < names.length; i++) {
-    var s = ss.getSheetByName(names[i]);
-    if (s && s.getLastRow() > 1) {
-      var n = s.getLastRow() - 1;
-      s.getRange(2, 1, n, s.getLastColumn()).clearContent();
-      msgs.push(names[i] + ': xoa ' + n + ' dong');
-    }
-  }
-  return jsonOk('Reset xong! ' + msgs.join(', '));
-}
-
+// ================= API JSON CHO TRANG WEB & BOT (?action=data) =================
 function apiData() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var t = nowParts();
@@ -347,6 +377,7 @@ function apiData() {
   var gioKeys = [], gioVals = [], ngayKeys = [], ngayVals = [];
   var nvNames = [], nvVals = [], nvDonVals = [];
   var baoCao = [];
+  var donHang = [];
 
   var dh = ss.getSheetByName('Don hang');
   if (dh && dh.getLastRow() > 1) {
@@ -364,6 +395,24 @@ function apiData() {
         gioMap[gioStr] = (gioMap[gioStr] || 0) + tien;
       }
       ngayMap[ngayStr] = (ngayMap[ngayStr] || 0) + tien;
+    }
+
+    // Tra ve 60 don hang gan nhat
+    var startD = Math.max(0, vals.length - 60);
+    for (var di = vals.length - 1; di >= startD; di--) {
+      donHang.push({
+        id: String(vals[di][0] || ''),
+        ngay: normDay(vals[di][1]),
+        gio: normHour(vals[di][2]),
+        nv: String(vals[di][3] || ''),
+        ca: String(vals[di][4] || ''),
+        mon: String(vals[di][5] || ''),
+        soMon: num(vals[di][6]),
+        total: num(vals[di][7]),
+        cash: num(vals[di][8]),
+        change: num(vals[di][9]),
+        note: String(vals[di][10] || '')
+      });
     }
   }
 
@@ -391,7 +440,15 @@ function apiData() {
   for (var n2 = 0; n2 < nAll.length; n2++) {
     nvNames.push(nAll[n2]); nvVals.push(nvMap[nAll[n2]]); nvDonVals.push(nvDon[nAll[n2]] || 0);
   }
-  var nAll2 = Object.keys(ngayMap).sort();
+
+  // Sort ngayMap theo dung timestamp thoi gian (tranh loi alphabet DD/MM/YYYY)
+  var nAll2 = Object.keys(ngayMap).sort(function (a, b) {
+    var pa = a.split('/'), pb = b.split('/');
+    if (pa.length === 3 && pb.length === 3) {
+      return new Date(pa[2], pa[1] - 1, pa[0]) - new Date(pb[2], pb[1] - 1, pb[0]);
+    }
+    return a.localeCompare(b);
+  });
   var start7 = Math.max(0, nAll2.length - 7);
   for (var d7 = start7; d7 < nAll2.length; d7++) { ngayKeys.push(nAll2[d7]); ngayVals.push(ngayMap[nAll2[d7]]); }
 
@@ -404,10 +461,59 @@ function apiData() {
     gio: { keys: gioKeys, vals: gioVals },
     nv: { names: nvNames, vals: nvVals, don: nvDonVals, donVals: nvDonVals },
     ngay: { keys: ngayKeys, vals: ngayVals },
-    baoCao: baoCao
+    baoCao: baoCao,
+    donHang: donHang
   };
   return ContentService.createTextOutput(JSON.stringify(out))
-    .setMimeType(ContentService.MimeType.JSON)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ================= RESET DU LIEU =================
+function handleReset() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  getOrCreateSheet('Don hang', ['Ma don', 'Ngay', 'Gio', 'Nhan vien', 'Ca', 'Mon hang (chi tiet)', 'So mon', 'Tong tien', 'Tien khach', 'Tien thoi', 'Ghi chu']);
+  getOrCreateSheet('Cham cong', ['Ngay', 'Gio', 'Ten nhan vien', 'Thao tac', 'Ca', 'Ghi chu']);
+  getOrCreateSheet('Bao cao doanh thu', ['Ngay', 'Gio', 'Ten nhan vien', 'Ca', 'Doanh thu', 'Tien mat', 'Ghi chu']);
+  getOrCreateSheet('Bao cao nghi ca', ['Ngay gui', 'Gio gui', 'Ten nhan vien', 'Ngay xin nghi', 'Ca xin nghi', 'Ly do']);
+  var names = ['Don hang', 'Cham cong', 'Bao cao doanh thu', 'Bao cao nghi ca'];
+  var msgs = [];
+  for (var i = 0; i < names.length; i++) {
+    var s = ss.getSheetByName(names[i]);
+    if (s && s.getLastRow() > 1) {
+      var n = s.getLastRow() - 1;
+      s.getRange(2, 1, n, s.getLastColumn()).clearContent();
+      msgs.push(names[i] + ': xoa ' + n + ' dong');
+    }
+  }
+  return jsonOk('Reset xong! ' + msgs.join(', '));
+}
+
+function handleDeleteOrderSheet(data) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Don hang');
+  var orderId = String(data.orderId || '').trim();
+  if (!sheet || !orderId) return jsonErr('Khong tim thay sheet hoac Ma don');
+
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return jsonOk('Sheet trong');
+
+  var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  var deletedCount = 0;
+
+  for (var i = ids.length - 1; i >= 0; i--) {
+    var idCell = String(ids[i][0] || '').trim();
+    if (idCell === orderId) {
+      sheet.deleteRow(i + 2);
+      deletedCount++;
+    }
+  }
+
+  if (deletedCount > 0) {
+    sendTelegram(String.fromCodePoint(0x1F5D1) + ' DA XOA DON HANG #' + orderId + ' tren Google Sheets');
+    return jsonOk('Da xoa don ' + orderId + ' (' + deletedCount + ' dong)');
+  }
+
+  return jsonOk('Khong tim thay don ' + orderId + ' tren Google Sheets');
 }
 
 function doGet(e) {
@@ -417,12 +523,8 @@ function doGet(e) {
   var t = nowParts();
   var L = [];
 
-  // ---- Du lieu tong hop hom nay ----
   var tongDoanhThu = 0, tongTienMat = 0, soDon = 0, soMon = 0;
-  var nvMap = {};        // doanh thu theo NV
-  var nvDon = {};        // so don theo NV
-  var gioMap = {};       // doanh thu theo gio (bieu do)
-  var ngayMap = {};      // doanh thu 7 ngay gan nhat
+  var nvMap = {}, nvDon = {}, gioMap = {}, ngayMap = {};
   var gioKeys = [], gioVals = [];
   var ngayKeys = [], ngayVals = [];
   var nvNames = [], nvVals = [], nvDonVals = [];
@@ -437,7 +539,6 @@ function doGet(e) {
       var nv = String(vals[i][3] || '?');
       var soM = num(vals[i][6]);
 
-      // Hom nay
       if (ngayStr === t.ngay) {
         soDon++;
         tongDoanhThu += tien;
@@ -446,7 +547,6 @@ function doGet(e) {
         nvDon[nv] = (nvDon[nv] || 0) + 1;
         gioMap[gioStr] = (gioMap[gioStr] || 0) + tien;
       }
-      // 7 ngay gan nhat
       ngayMap[ngayStr] = (ngayMap[ngayStr] || 0) + tien;
     }
   }
@@ -459,28 +559,31 @@ function doGet(e) {
     }
   }
 
-  // Sap xep gio tang dan
   var gAll = Object.keys(gioMap).sort();
   for (var g = 0; g < gAll.length; g++) {
     gioKeys.push(gAll[g]);
     gioVals.push(gioMap[gAll[g]]);
   }
-  // Sap xep NV theo doanh thu giam dan
   var nAll = Object.keys(nvMap).sort(function (a, b) { return nvMap[b] - nvMap[a]; });
   for (var n2 = 0; n2 < nAll.length; n2++) {
     nvNames.push(nAll[n2]);
     nvVals.push(nvMap[nAll[n2]]);
     nvDonVals.push(nvDon[nAll[n2]] || 0);
   }
-  // 7 ngay gan nhat (ngay gan nhat dung sau)
-  var nAll2 = Object.keys(ngayMap).sort();
+
+  var nAll2 = Object.keys(ngayMap).sort(function (a, b) {
+    var pa = a.split('/'), pb = b.split('/');
+    if (pa.length === 3 && pb.length === 3) {
+      return new Date(pa[2], pa[1] - 1, pa[0]) - new Date(pb[2], pb[1] - 1, pb[0]);
+    }
+    return a.localeCompare(b);
+  });
   var start7 = Math.max(0, nAll2.length - 7);
   for (var d7 = start7; d7 < nAll2.length; d7++) {
     ngayKeys.push(nAll2[d7]);
     ngayVals.push(ngayMap[nAll2[d7]]);
   }
 
-  // ---- HTML Dashboard voi Chart.js ----
   L.push('<!DOCTYPE html>');
   L.push('<html lang="vi"><head><meta charset="UTF-8">');
   L.push('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
@@ -507,14 +610,12 @@ function doGet(e) {
   L.push('@media(max-width:480px){.card .val{font-size:20px}.header h1{font-size:20px}.chart-box{height:220px}}');
   L.push('</style></head><body><div class="wrap">');
 
-  // Header
   L.push('<div class="header">');
   L.push('<h1>&#127866; SAM MIX</h1>');
   L.push('<div class="sub">Dashboard Co Dong - Bieu do real-time | ' + t.ngay + ' ' + t.gio + ' | ' + t.ca + '</div>');
   L.push('<span class="badge">&#128994; LIVE - tu dong cap nhat 30s</span>');
   L.push('</div>');
 
-  // 4 KPI cards
   L.push('<div class="grid">');
   L.push('<div class="card"><div class="label">Doanh thu</div><div class="val green">' + moneyFmt(tongDoanhThu) + '</div></div>');
   L.push('<div class="card"><div class="label">Tien mat</div><div class="val yellow">' + moneyFmt(tongTienMat) + '</div></div>');
@@ -522,17 +623,13 @@ function doGet(e) {
   L.push('<div class="card"><div class="label">So mon</div><div class="val pink">' + soMon + '</div></div>');
   L.push('</div>');
 
-  // Bieu do 1: Doanh thu theo gio hom nay (line)
   L.push('<div class="sec"><h2>&#128200; Doanh thu theo gio - hom nay</h2><div class="chart-box"><canvas id="chGio"></canvas></div></div>');
-  // Bieu do 2: Doanh thu theo nhan vien (bar)
   L.push('<div class="sec"><h2>&#128101; Quan ly nhan vien - doanh thu &amp; so don</h2><div class="chart-box"><canvas id="chNV"></canvas></div></div>');
-  // Bieu do 3: Doanh thu 7 ngay gan nhat (bar)
   L.push('<div class="sec"><h2>&#128202; Doanh thu 7 ngay gan nhat</h2><div class="chart-box"><canvas id="ch7"></canvas></div></div>');
 
   L.push('<div class="footer">SAM MIX Dashboard | Cap nhat luc ' + t.gio + ' | Tu dong lam moi moi 30 giay</div>');
   L.push('</div>');
 
-  // ---- Du lieu JSON cho Chart.js ----
   L.push('<script>');
   L.push('var gioKeys = ' + JSON.stringify(gioKeys) + ';');
   L.push('var gioVals = ' + JSON.stringify(gioVals) + ';');
@@ -551,32 +648,4 @@ function doGet(e) {
   L.push('</body></html>');
 
   return HtmlService.createHtmlOutput(L.join(String.fromCodePoint(0x0A))).setTitle('SAM MIX - Dashboard Co Dong');
-}
-function handleDeleteOrderSheet(data) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName('Don hang');
-  var orderId = String(data.orderId || '').trim();
-  if (!sheet || !orderId) return jsonErr('Khong tim thay sheet hoac Ma don');
-
-  var lastRow = sheet.getLastRow();
-  if (lastRow <= 1) return jsonOk('Sheet trong');
-
-  var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
-  var deletedCount = 0;
-
-  // Xoa cac dong trung Ma don (duyet nguoc tu duoi len de khong lech index)
-  for (var i = ids.length - 1; i >= 0; i--) {
-    var idCell = String(ids[i][0] || '').trim();
-    if (idCell === orderId) {
-      sheet.deleteRow(i + 2);
-      deletedCount++;
-    }
-  }
-
-  if (deletedCount > 0) {
-    sendTelegram(String.fromCodePoint(0x1F5D1) + ' DA XOA DON HANG #' + orderId + ' tren Google Sheets');
-    return jsonOk('Da xoa don ' + orderId + ' (' + deletedCount + ' dong)');
-  }
-
-  return jsonOk('Khong tim thay don ' + orderId + ' tren Google Sheets');
 }

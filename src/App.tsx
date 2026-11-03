@@ -6,22 +6,28 @@ import PlannerPage from './pages/PlannerPage';
 import './App.css';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'landing' | 'pos' | 'staff' | 'planner'>(() => {
+  const getTabFromUrl = (): 'landing' | 'pos' | 'staff' | 'planner' => {
+    if (typeof window === 'undefined') return 'landing';
     const hash = window.location.hash.toLowerCase();
-    if (hash.includes('planner')) return 'planner';
-    if (hash.includes('staff') || hash.includes('recipes')) return 'staff';
-    if (hash.includes('pos')) return 'pos';
+    const search = window.location.search.toLowerCase();
+    if (hash.includes('planner') || hash.includes('codong') || hash.includes('baocao') || hash.includes('report') || search.includes('codong') || search.includes('planner')) {
+      return 'planner';
+    }
+    if (hash.includes('staff') || hash.includes('recipes') || hash.includes('chamcong')) {
+      return 'staff';
+    }
+    if (hash.includes('pos') || hash.includes('order') || hash.includes('banhang')) {
+      return 'pos';
+    }
     return 'landing';
-  });
+  };
+
+  const [activeTab, setActiveTab] = useState<'landing' | 'pos' | 'staff' | 'planner'>(getTabFromUrl);
 
   // Listen to Hash change in URL
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.toLowerCase();
-      if (hash.includes('planner')) setActiveTab('planner');
-      else if (hash.includes('staff') || hash.includes('recipes')) setActiveTab('staff');
-      else if (hash.includes('pos')) setActiveTab('pos');
-      else setActiveTab('landing');
+      setActiveTab(getTabFromUrl());
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -33,20 +39,31 @@ export default function App() {
     window.location.hash = `#/${tab}`;
   };
 
+  const isShareholderOnly = window.location.hash.toLowerCase().includes('codong') || 
+                            window.location.search.toLowerCase().includes('codong');
+
   return (
     <div className="app-container">
       <header className="app-header">
         <div className="header-content">
-          <div className="brand" onClick={() => changeTab('landing')} style={{ cursor: 'pointer' }}>
+          <div className="brand" onClick={() => changeTab('landing')}>
             <span className="brand-icon">🌿</span>
-            <span className="brand-title">SÂM MIX</span>
+            <div>
+              <div className="brand-title">SÂM MIX HEALTHY</div>
+              <div className="brand-subtitle">
+                {isShareholderOnly 
+                  ? '📊 Cổng Thông Tin Báo Cáo Doanh Thu Cổ Đông' 
+                  : 'Nước Sâm Thảo Mộc · Bánh Bao Kẹp Tai Bao · Nước Ép Tươi · KDC Conic'}
+              </div>
+            </div>
           </div>
+
           <nav className="nav-tabs">
             <button 
               className={activeTab === 'landing' ? 'nav-tab active' : 'nav-tab'}
               onClick={() => changeTab('landing')}
             >
-              🏠 Trang Chủ (Khách)
+              🏠 Thực Đơn (Khách)
             </button>
             <button 
               className={activeTab === 'pos' ? 'nav-tab active' : 'nav-tab'}
@@ -58,13 +75,13 @@ export default function App() {
               className={activeTab === 'staff' ? 'nav-tab active' : 'nav-tab'}
               onClick={() => changeTab('staff')}
             >
-              👥 Nhân Viên
+              👥 Nhân Viên / Ca
             </button>
             <button 
               className={activeTab === 'planner' ? 'nav-tab active' : 'nav-tab'}
               onClick={() => changeTab('planner')}
             >
-              📊 Báo Cáo Cổ Đông
+              📊 Báo Cáo Doanh Thu
             </button>
           </nav>
         </div>

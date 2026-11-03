@@ -36,6 +36,31 @@ export default function StaffPage() {
         setApiRevenue(d.kpi.doanhThu || 0);
         setApiOrders(d.kpi.soDon || 0);
       }
+      if (d && Array.isArray(d.donHang) && d.donHang.length > 0) {
+        setRecentOrders(prev => {
+          const map = new Map<string, Order>();
+          prev.forEach(o => map.set(o.id, o));
+          d.donHang.forEach((dh: any) => {
+            if (!map.has(dh.id)) {
+              map.set(dh.id, {
+                id: dh.id,
+                time: new Date().toISOString(),
+                staff: dh.nv || 'NV',
+                shift: (dh.ca && dh.ca.includes('Sang')) ? 'sang' : 'chieu',
+                lines: [{ id: dh.id + '_item', name: dh.mon, price: dh.total, qty: dh.soMon || 1 }],
+                total: dh.total || 0,
+                cash: dh.cash || undefined,
+                change: dh.change || undefined,
+                paymentMethod: (dh.note && dh.note.includes('Chuyen khoan')) ? 'chuyenkhoan' : (dh.note && dh.note.includes('App')) ? 'app' : 'tienmat',
+                synced: true
+              });
+            }
+          });
+          const merged = Array.from(map.values());
+          try { localStorage.setItem('sammix_orders_v1', JSON.stringify(merged)); } catch {}
+          return merged;
+        });
+      }
     } catch {}
   };
 
@@ -328,10 +353,10 @@ export default function StaffPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
             <div>
-              {(['sam', 'coffee', 'ep', 'food', 'app'] as const).map(cat => (
+              {(['sam', 'bbk', 'coffee', 'ep', 'food', 'app'] as const).map(cat => (
                 <div key={cat} className="glass-panel" style={{ marginBottom: '1.5rem', padding: '1.2rem' }}>
                   <h2 style={{ marginTop: 0, color: cat === 'sam' ? '#d35400' : cat === 'coffee' ? '#6f4e37' : cat === 'ep' ? '#3498db' : '#e67e22', fontSize: '1.1rem' }}>
-                    {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : cat === 'coffee' ? '☕ Cà Phê Phin' : cat === 'ep' ? '🥤 Nước Ép Trái Cây Tươi' : cat === 'food' ? '🍢 Đồ Ăn Vặt & Nem Nướng' : '🛵 Đơn App Online (ShopeeFood / Grab)'}
+                    {cat === 'sam' ? '🍵 Trà Sâm Thảo Mộc' : cat === 'bbk' ? '🥟 Bánh Bao Kẹp (Tai Bao)' : cat === 'coffee' ? '☕ Cà Phê Phin & Trà' : cat === 'ep' ? '🥤 Nước Ép Trái Cây Tươi' : cat === 'food' ? '🍢 Đồ Ăn Vặt & Món Nóng' : '🛵 Đơn App Online'}
                   </h2>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
                     {MENU.filter(m => m.category === cat).map(item => (
