@@ -170,6 +170,24 @@ export const MENU: MenuItem[] = [
     description: 'Vị chua ngọt thanh dịu, giàu vitamin C và chất xơ'
   },
   {
+    id: 'ep-tao',
+    name: 'Táo Ép Nguyên Chất',
+    price: 20000,
+    category: 'ep',
+    badge: 'Thanh Ngọt',
+    img: 'tao.jpg',
+    description: 'Táo tươi ép nguyên chất ngọt thanh tự nhiên, giàu chất chống oxy hóa & thanh lọc cơ thể'
+  },
+  {
+    id: 'ep-oi',
+    name: 'Ổi Ép Tươi',
+    price: 20000,
+    category: 'ep',
+    badge: 'Vitamin C++',
+    img: 'oi.jpg',
+    description: 'Ổi tươi ép thanh mát thơm lừng, bổ sung hàm lượng vitamin C dồi dào'
+  },
+  {
     id: 'ep-trai-cay-mix',
     name: 'Ép Trái Cây Mix',
     price: 25000,

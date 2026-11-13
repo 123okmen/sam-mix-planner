@@ -290,6 +290,30 @@ export default function LandingPage() {
             </div>
 
             <div className="menu-item">
+              <img className="item-thumb" src={getItemImgUrl('tao.jpg')} alt="Táo Ép" loading="lazy" />
+              <div className="item-info">
+                <div className="item-name-row">
+                  <h3 className="item-name">Táo Ép</h3>
+                  <span className="item-badge badge-green">Thanh Ngọt</span>
+                </div>
+                <div className="item-note">Táo tươi ép ngọt thanh, thanh lọc cơ thể</div>
+              </div>
+              <div className="item-price">20K</div>
+            </div>
+
+            <div className="menu-item">
+              <img className="item-thumb" src={getItemImgUrl('oi.jpg')} alt="Ổi Ép" loading="lazy" />
+              <div className="item-info">
+                <div className="item-name-row">
+                  <h3 className="item-name">Ổi Ép</h3>
+                  <span className="item-badge badge-green">Vitamin C</span>
+                </div>
+                <div className="item-note">Ổi tươi ép thanh mát, dồi dào vitamin C</div>
+              </div>
+              <div className="item-price">20K</div>
+            </div>
+
+            <div className="menu-item">
               <img className="item-thumb" src={getItemImgUrl('cantay.JPG')} alt="Ép Trái Cây Mix" loading="lazy" />
               <div className="item-info">
                 <div className="item-name-row">

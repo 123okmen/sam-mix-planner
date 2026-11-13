@@ -27,6 +27,8 @@ const MENU_ITEMS = [
   { id: 'ep_carot', name: 'Cà Rốt Đà Lạt', originalPrice: 20000 },
   { id: 'ep_dua', name: 'Dứa Mật', originalPrice: 20000 },
   { id: 'ep_coc', name: 'Cóc Non', originalPrice: 20000 },
+  { id: 'ep_tao', name: 'Táo Ép', originalPrice: 20000 },
+  { id: 'ep_oi', name: 'Ổi Ép', originalPrice: 20000 },
   { id: 'ep_cantay', name: 'Cần Tây Mix Táo', originalPrice: 30000 },
   { id: 'nem_nuong', name: 'Nem Nướng', originalPrice: 15000 },
   { id: 'oc_buou_nhoi_thit', name: 'Ốc Bươu Nhồi Thịt', originalPrice: 50000 },
@@ -612,6 +614,16 @@ export default function RecipePage() {
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cóc Non</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt cóc ép tươi + 35ml nước đường mật mía + đá</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>Bắt buộc có muối tinh liều lượng nhỏ</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Táo Ép</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt táo ép tươi + 15ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 1-2 giọt cốt chanh để giữ màu táo tươi không thâm</td>
+              </tr>
+              <tr style={{ background: '#f9f9f9' }}>
+                <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Ổi Ép</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>200ml cốt ổi ép tươi + 20ml nước đường mật mía + đá</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>Thêm 1 xíu muối tinh và 5ml cốt tắc để kích vị thơm ngọt</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px', border: '1px solid #ddd', fontWeight: 'bold', color: '#27ae60' }}>Cần Tây Mix Táo</td>
