@@ -199,6 +199,15 @@ export const MENU: MenuItem[] = [
 
   // --- 5. ĐỒ ĂN VẶT & MÓN NÓNG ---
   {
+    id: 'banh-trang-tron',
+    name: 'Bánh Tráng Trộn',
+    price: 20000,
+    category: 'food',
+    badge: 'Ăn Vặt Hot',
+    img: 'banh_trang_tron.jpg',
+    description: 'Bánh tráng dẻo thấm vị muối tôm, bò khô, trứng cút, rau răm, sốt tắc chua ngọt đậm đà'
+  },
+  {
     id: 'av-2',
     name: 'Khoai Tây Chiên Lắc Phô Mai',
     price: 25000,

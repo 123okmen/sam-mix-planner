@@ -334,6 +334,18 @@ export default function LandingPage() {
             </div>
 
             <div className="menu-item">
+              <img className="item-thumb" src={getItemImgUrl('banh_trang_tron.jpg')} alt="Bánh Tráng Trộn" loading="lazy" />
+              <div className="item-info">
+                <div className="item-name-row">
+                  <h3 className="item-name">Bánh Tráng Trộn</h3>
+                  <span className="item-badge badge-amber">Ăn Vặt Hot</span>
+                </div>
+                <div className="item-note">Trứng cút, bò khô, rau răm, sốt tắc đậm đà</div>
+              </div>
+              <div className="item-price">20K</div>
+            </div>
+
+            <div className="menu-item">
               <img className="item-thumb" src={getItemImgUrl('menu/av-2.jpg')} alt="Khoai Tây Chiên Lắc Phô Mai" loading="lazy" />
               <div className="item-info">
                 <div className="item-name-row">
