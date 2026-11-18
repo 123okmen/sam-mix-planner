@@ -374,8 +374,9 @@ function apiData() {
   var t = nowParts();
   var tongDoanhThu = 0, tongTienMat = 0, soDon = 0, soMon = 0;
   var nvMap = {}, nvDon = {}, gioMap = {}, ngayMap = {};
-  var gioKeys = [], gioVals = [], ngayKeys = [], ngayVals = [];
+  var gioKeys = [], gioVals = [], ngayKeys = [], ngayVals = [], ngay30Keys = [], ngay30Vals = [];
   var nvNames = [], nvVals = [], nvDonVals = [];
+  var thangNayDoanhThu = 0, thangNaySoDon = 0, thangNaySoMon = 0;
   var baoCao = [];
   var donHang = [];
 
@@ -393,6 +394,13 @@ function apiData() {
         nvMap[nv] = (nvMap[nv] || 0) + tien;
         nvDon[nv] = (nvDon[nv] || 0) + 1;
         gioMap[gioStr] = (gioMap[gioStr] || 0) + tien;
+      }
+      var dayParts = ngayStr.split('/');
+      var nowPartsDate = t.ngay.split('/');
+      if (dayParts.length === 3 && nowPartsDate.length === 3 && dayParts[1] === nowPartsDate[1] && dayParts[2] === nowPartsDate[2]) {
+        thangNayDoanhThu += tien;
+        thangNaySoDon++;
+        thangNaySoMon += soM;
       }
       ngayMap[ngayStr] = (ngayMap[ngayStr] || 0) + tien;
     }
@@ -451,6 +459,8 @@ function apiData() {
   });
   var start7 = Math.max(0, nAll2.length - 7);
   for (var d7 = start7; d7 < nAll2.length; d7++) { ngayKeys.push(nAll2[d7]); ngayVals.push(ngayMap[nAll2[d7]]); }
+  var start30 = Math.max(0, nAll2.length - 30);
+  for (var d30 = start30; d30 < nAll2.length; d30++) { ngay30Keys.push(nAll2[d30]); ngay30Vals.push(ngayMap[nAll2[d30]]); }
 
   var out = {
     ok: true,
@@ -461,6 +471,8 @@ function apiData() {
     gio: { keys: gioKeys, vals: gioVals },
     nv: { names: nvNames, vals: nvVals, don: nvDonVals, donVals: nvDonVals },
     ngay: { keys: ngayKeys, vals: ngayVals },
+    ngay30: { keys: ngay30Keys, vals: ngay30Vals },
+    thangNay: { doanhThu: thangNayDoanhThu, soDon: thangNaySoDon, soMon: thangNaySoMon },
     baoCao: baoCao,
     donHang: donHang
   };
