@@ -87,6 +87,7 @@ export default function PlannerPage() {
   const [data, setData] = useState<any>(null);
   const [err, setErr] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<string>('');
+  const [reportPeriod, setReportPeriod] = useState<'live' | '7d' | '30d'>('live');
 
   const [payrollMonth, setPayrollMonth] = useState('2026-09');
 
@@ -194,6 +195,20 @@ export default function PlannerPage() {
     const timer = setInterval(fetchData, 30000);
     return () => clearInterval(timer);
   }, []);
+
+  const revenueRows = useMemo(() => {
+    const rows = (data?.baoCao || []).reduce((map: Record<string, number>, row: any) => {
+      const day = row.ngay || 'Không rõ ngày';
+      map[day] = (map[day] || 0) + Number(row.doanhThu || 0);
+      return map;
+    }, {});
+    return Object.entries(rows).slice(-30).map(([day, revenue]) => ({ day, revenue: Number(revenue) }));
+  }, [data]);
+
+  const reportRows = reportPeriod === '7d' ? revenueRows.slice(-7) : revenueRows;
+  const reportTotal = reportPeriod === 'live'
+    ? Number(data?.kpi?.doanhThu || 0)
+    : reportRows.reduce((sum, row) => sum + row.revenue, 0);
 
   // Render Charts
   useEffect(() => {
@@ -337,6 +352,18 @@ export default function PlannerPage() {
             ⚠️ {err}
           </div>
         )}
+
+        {/* Báo cáo doanh thu: Live / 7 ngày / 30 ngày */}
+        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '14px', marginBottom: '1.5rem', border: '1px solid rgba(255,255,255,0.15)' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+            {([['live', '🔴 Live'], ['7d', '📅 7 ngày'], ['30d', '📆 30 ngày']] as const).map(([key, label]) => (
+              <button key={key} type="button" onClick={() => setReportPeriod(key)} style={{ padding: '8px 16px', borderRadius: '20px', border: `1px solid ${reportPeriod === key ? '#34d399' : '#64748b'}`, background: reportPeriod === key ? '#047857' : '#1e293b', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>{label}</button>
+            ))}
+          </div>
+          <div style={{ color: '#34d399', fontSize: '2rem', fontWeight: 800 }}>{fmtVND(reportTotal)}</div>
+          <div style={{ marginTop: '4px', opacity: 0.8 }}>{reportPeriod === 'live' ? 'Doanh thu hôm nay · cập nhật mỗi 30 giây' : `Tổng doanh thu ${reportPeriod === '7d' ? '7 ngày' : '30 ngày'} gần nhất`}</div>
+          {reportPeriod !== 'live' && <div style={{ marginTop: '1rem' }}>{reportRows.length === 0 ? <div>Chưa có dữ liệu.</div> : reportRows.map(row => <div key={row.day} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,.12)' }}><span>{row.day}</span><strong>{fmtVND(row.revenue)}</strong></div>)}</div>}
+        </div>
 
         {/* 4 KPI Cards Realtime */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
