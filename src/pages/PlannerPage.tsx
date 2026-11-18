@@ -127,7 +127,13 @@ export default function PlannerPage() {
   // Fetch real-time dashboard data from Google Sheets API
   const fetchData = async () => {
     try {
-      const r = await fetch(API_URL, { headers: { 'Accept': 'application/json' } });
+      const r = await fetch(API_URL, {
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store'
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const contentType = r.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) throw new Error('Google Apps Script không trả JSON');
       const d = await r.json();
       if (d && d.ok) {
         setData(d);

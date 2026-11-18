@@ -165,11 +165,17 @@ export default function StaffPage() {
 
   const postJson = async (payload: any) => {
     try {
-      await fetch(API, {
-        method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
+      const r = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+        cache: 'no-store'
       });
-      return true;
+      if (!r.ok) return false;
+      const contentType = r.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) return false;
+      const result = await r.json();
+      return result?.ok === true;
     } catch { return false; }
   };
 

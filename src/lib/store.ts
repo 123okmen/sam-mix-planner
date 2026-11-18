@@ -208,6 +208,15 @@ export const MENU: MenuItem[] = [
     description: 'Bánh tráng dẻo thấm vị muối tôm, bò khô, trứng cút, rau răm, sốt tắc chua ngọt đậm đà'
   },
   {
+    id: 'topping-trung-cut',
+    name: 'Topping Trứng Cút',
+    price: 5000,
+    category: 'food',
+    badge: 'Topping',
+    img: 'banh_trang_tron.jpg',
+    description: 'Thêm topping trứng cút cho món ăn đậm đà, tròn vị hơn'
+  },
+  {
     id: 'av-2',
     name: 'Khoai Tây Chiên Lắc Phô Mai',
     price: 25000,
@@ -302,10 +311,9 @@ export function saveOrder(order: Order) {
 
 export async function syncOrder(order: Order): Promise<boolean> {
   try {
-    await fetch(APP_SCRIPT_URL, {
+    const response = await fetch(APP_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { 'Content-Type': 'text/plain', 'Accept': 'application/json' },
       body: JSON.stringify({
         type: 'order',
         orderId: order.id,
@@ -320,7 +328,9 @@ export async function syncOrder(order: Order): Promise<boolean> {
         time: order.time
       })
     });
-    return true;
+    if (!response.ok) return false;
+    const result = await response.json();
+    return result?.ok === true;
   } catch {
     return false;
   }
