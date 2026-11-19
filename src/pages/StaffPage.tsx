@@ -165,17 +165,15 @@ export default function StaffPage() {
 
   const postJson = async (payload: any) => {
     try {
-      const r = await fetch(API, {
+      // Apps Script redirects POST; no-cors prevents false CORS failure after server accepts it.
+      await fetch(API, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain', 'Accept': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload),
         cache: 'no-store'
       });
-      if (!r.ok) return false;
-      const contentType = r.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) return false;
-      const result = await r.json();
-      return result?.ok === true;
+      return true;
     } catch { return false; }
   };
 
