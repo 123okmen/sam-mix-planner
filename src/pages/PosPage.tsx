@@ -91,7 +91,7 @@ export default function PosPage() {
     : [filterCat];
 
   return (
-    <LoginGate expectedPassword="sammixnv" storageKey="auth_pos" title="Khu Vực Bán Hàng">
+    <LoginGate expectedPassword="sha256:da2fdf30817647c659c0918a37f79894d6b09fd91f45e0b200fff4629f474845" storageKey="auth_pos" title="Khu Vực Bán Hàng">
       <div style={{ padding: '1rem', maxWidth: '1240px', margin: '0 auto', color: 'var(--text-primary)' }}>
         <h1 style={{ color: '#10b981', textAlign: 'center', margin: '0.5rem 0', fontSize: '1.75rem' }}>🧾 Bán Hàng & Thu Ngân Sâm Mix</h1>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
